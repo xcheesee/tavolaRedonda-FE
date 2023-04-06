@@ -1,40 +1,57 @@
 <script lang="ts">
     import { Accordion, AccordionItem, modalStore, type ModalSettings, type ModalComponent } from '@skeletonlabs/skeleton';
+    import type { PageData } from '../$types';
+    import { invalidate } from '$app/navigation';
     import type { Produto } from '../../utils/types';
-	import ProdutoTable from '../../components/produtoTable.svelte';
-	import ProdutoForm from '../../components/produtoForm.svelte';
+    import ProdutoTable from '../../components/produtoTable.svelte';
+    import ProdutoForm from '../../components/produtoForm.svelte';
     import { Paginator } from '@skeletonlabs/skeleton';
-    const produtos: Produto[] = [
-        {
-            id: "0",
-            nome: "Hamburger",
-            valor: "15.99",
-        },
-        {
-            id: "0",
-            nome: "Hamburger",
-            valor: "15.99",
-        },
-        {
-            id: "0",
-            nome: "Hamburger",
-            valor: "15.99",
-        },
-    ]
+    export let data: PageData;
+    //const produtos: Produto[] = [
+    //    {
+    //        id: "0",
+    //        nome: "Hamburger",
+    //        valor: "15.99",
+    //    },
+    //    {
+    //        id: "0",
+    //        nome: "Hamburger",
+    //        valor: "15.99",
+    //    },
+    //    {
+    //        id: "0",
+    //        nome: "Hamburger",
+    //        valor: "15.99",
+    //    },
+    //]
+
     const formModalComp: ModalComponent = {
         ref: ProdutoForm,
         props: { background: "variant-ghost-primary" }    
     }
 
-    const alert: ModalSettings = {
+    const prodForm: ModalSettings = {
         type: 'component',
-        component: formModalComp
+        component: formModalComp,
+        response: async (r: {nome: string, valor: string}) => {
+            await fetch("http://localhost:8000/api/produtos", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nome: r.nome,
+                    valor: r.valor,
+                })
+            })
+            invalidate('prods')
+        },
     };
-    let addFormVisible: boolean = false;
+    let produtos = data //getProdutos()
     let page = {
         offset: 0,
         limit: 5,
-        size: produtos.length,
+        size: 5,
         amounts: [1,2,5,10],
     }
 </script>
@@ -44,7 +61,7 @@
             <svelte:fragment slot="summary">Filtros</svelte:fragment>
             <svelte:fragment slot="content">
                 <label class="label">
-                    <span>Filtro1</span>
+                    <span></span>
                     <input class="input" type="text" placeholder="input"/>
                 </label>
             </svelte:fragment>
@@ -61,24 +78,25 @@
         <AccordionItem open>
             <svelte:fragment slot="summary">Produtos</svelte:fragment>
             <svelte:fragment slot="content">
-                <ProdutoTable produtos={produtos} />
+                {#await produtos}
+                <div>Carregando...</div>
+                {:then prods}
+                <ProdutoTable produtos={prods} />
                 <Paginator bind:settings={page} />
                 <div class="flex justify-end">
                     <button 
                         type="button" 
                         class="btn variant-ghost-primary rounded-xl"
                         on:click={() => {
-                            modalStore.trigger(alert);
+                            modalStore.trigger(prodForm);
                         }}
-                        on:keypress={() => addFormVisible = true}
+                        on:keypress={() => {}}
                     >
                         Add
                     </button>
                 </div>
+                {/await}
             </svelte:fragment>
         </AccordionItem>
     </Accordion>
 </div>
-{#if addFormVisible}
-    <div></div>
-{/if}

@@ -2,6 +2,7 @@
     import type { Produto } from "../utils/types";
     import type { ModalSettings } from "@skeletonlabs/skeleton"
     import Icon from "@iconify/svelte"
+	import ProdutoRow from "./produtoRow.svelte";
     export let produtos: Produto[];
     const confirm: ModalSettings = {
 	type: 'confirm',
@@ -23,22 +24,9 @@
 			</tr>
 		</thead>
 		<tbody class="bg-primary-700">
-			{#each produtos as row, i}
+			{#each produtos.produto as produto}
 				<tr>
-					<td>{row.id}</td>
-					<td class="w-3/4">{row.nome}</td>
-					<td>R$ {row.valor}</td>
-                    <td>
-                        <button 
-                            type="button"
-                            on:click={() => {}}
-                        >
-                            <Icon icon="mdi:pencil-circle" width="32" height="32"/>
-                        </button>
-                        <button type="button">
-                            <Icon icon="mdi:trash-circle" width="32" height="32"/>
-                        </button>
-                    </td>
+					<ProdutoRow produto={produto} />
 				</tr>
 			{/each}
 		</tbody>

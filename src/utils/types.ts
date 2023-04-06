@@ -1,5 +1,8 @@
 export interface Produto {
-    id: string;
-    nome: string;
-    valor: string;
+    mensagem: string
+    produto: {
+	id: string;
+    	nome: string;
+    	valor: string;
+    }
 }
