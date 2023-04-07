@@ -6,6 +6,7 @@ Para executar o front-end dessa aplicacao em um terminal:
 - cd tavolaRedonda-FE
 - npm i
 - npm run dev --open
+
 seguindo esses passos voce podera abrir o navegador e ir ao caminho http://localhost:5173/admin para utilizar o modulo administrativo
 
 ## Executando back-end
@@ -15,6 +16,7 @@ Para executar o back-end/database dessa aplicacao em um terminal:
 - composer install
 - composer update
 - php artisan serve
+
 seguindo esses passos voce podera recuperar os dados dos produtos guardados no banco a partir de seu front-end
 # create-svelte
 
