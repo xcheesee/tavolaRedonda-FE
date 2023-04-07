@@ -6,8 +6,11 @@
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
 	import { browser } from '$app/environment';
-	import { AppShell, Modal } from '@skeletonlabs/skeleton';
+	import { AppShell, Modal, type ModalComponent } from '@skeletonlabs/skeleton';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
+	import ProdutoForm from '../components/produtoForm.svelte';
+	import { produtoStore } from '../utils/stores';
+
 	const queryClient = new QueryClient({
 		defaultOptions: {
 			queries: {
@@ -15,9 +18,17 @@
 			},
 		},
 	})
+
+	const modalComponentRegistry: Record<string, ModalComponent> = {
+		formModal: {
+			ref: ProdutoForm,
+			props: {produto: $produtoStore},
+			slot: '<p>Pog</p>'
+		}
+	}
 </script>
 <QueryClientProvider client={queryClient}>
-	<Modal />
+	<Modal components={modalComponentRegistry}/>
 	<AppShell>
 		<div slot="header" class="flex justify-between px-4 py-2 items-center bg-surface-700">
 		<div class="text-3xl"> Tavola Redonda</div>

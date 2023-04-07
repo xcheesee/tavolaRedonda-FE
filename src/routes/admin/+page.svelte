@@ -1,13 +1,12 @@
 <script lang="ts">
   import type { PageData } from './$types';
-  import { Accordion, AccordionItem, modalStore, type ModalSettings, type ModalComponent } from '@skeletonlabs/skeleton';
-  //import { invalidate } from '$app/navigation';
+  import { Accordion, AccordionItem, modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
   import ProdutoTable from '../../components/produtoTable.svelte';
-  import ProdutoForm from '../../components/produtoForm.svelte';
   import { Paginator } from '@skeletonlabs/skeleton';
   import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { addProduto } from '../../utils/funcs';
   import type { Produto } from '../../utils/types';
+  import { produtoStore } from '../../utils/stores';
 
   const queryClient = useQueryClient()
 
@@ -35,7 +34,6 @@
               valor: valor,
             }
           ]
-          
         })
       }
       return [prevProds]
@@ -44,19 +42,15 @@
       queryClient.invalidateQueries(['produtos'])
     }
   })
-  
-  
-  const formModalComp: ModalComponent = {
-    ref: ProdutoForm,
-  }
 
   const prodForm: ModalSettings = {
     type: 'component',
-    component: formModalComp,
+    component: 'formModal',
     response: async (r: {nome: string, valor: string, send: boolean}) => {
       if(r.send) $addProdMutation.mutate({nome: r.nome, valor: r.valor})
     },
   };
+
   let page = {
     offset: 0,
     limit: 5,
@@ -64,6 +58,7 @@
     amounts: [1,2,5,10],
   }
 </script>
+
 <div class="flex flex-col gap-4 px-8">
   <Accordion class="card">
     <AccordionItem>
@@ -98,6 +93,7 @@
             type="button" 
             class="btn variant-ghost-primary rounded-xl"
             on:click={() => {
+            produtoStore.set({id: "", nome: "", valor: ""})
             modalStore.trigger(prodForm);
             }}
             on:keypress={() => {}}

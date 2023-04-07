@@ -1,11 +1,10 @@
 <script lang="ts">
-  import { modalStore, type ModalSettings, type ModalComponent } from "@skeletonlabs/skeleton";
+  import { modalStore, type ModalSettings } from "@skeletonlabs/skeleton";
   import Icon from "@iconify/svelte";
-  import ProdutoForm from "./produtoForm.svelte";
-  //import { invalidate } from "$app/navigation";
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import type { Produto, ProdutoItem } from "../utils/types";
   import { delProduto, editProduto } from "../utils/funcs";
+  import { produtoStore } from "../utils/stores";
   export let produto: {id: string, nome: string, valor: string}
 
   const queryClient = useQueryClient()
@@ -14,22 +13,12 @@
     type: 'confirm',
     title: `Deletar ${produto.nome}`,
     body: `Deseja remover ${produto.nome} dos registros?`,
-    response: async (r: boolean) => {
-      if(r) {
-        $delProdMutation.mutate({id: produto.id})
-      }
-    }
-  }
-
-  const editComponent: ModalComponent = {
-    ref: ProdutoForm,
-    props: {produto: produto, type: 'edit'},
-
+    response: async (r: boolean) => { if(r) $delProdMutation.mutate({id: produto.id}) }
   }
 
   const edit: ModalSettings = {
     type: 'component',
-    component: editComponent,
+    component: 'formModal',
     response: async (r: {nome: string, valor: string, send: boolean}) => {
       if(r.send) $editProdMutation.mutate({id: produto.id, nome: r.nome, valor: r.valor})
     }
@@ -48,10 +37,9 @@
       }
       return [prevProds]
     },
-    onSettled: () => {
-      queryClient.invalidateQueries(['produtos'])
-    }
+    onSettled: () => queryClient.invalidateQueries(['produtos'])
   })
+
   const editProdMutation = createMutation(editProduto, {
     onMutate: async (produto: ProdutoItem) => {
       await queryClient.cancelQueries(['produtos'])
@@ -68,9 +56,7 @@
       }
       return [prevProds]
     },
-    onSettled: () => {
-      queryClient.invalidateQueries(['produtos'])
-    }
+    onSettled: () => queryClient.invalidateQueries(['produtos'])
   })
 
 </script>
@@ -81,7 +67,10 @@
 <td>
   <button 
     type="button"
-    on:click={() => {modalStore.trigger(edit)}}
+    on:click={() => {
+    produtoStore.set({id: produto.id, nome: produto.nome, valor: produto.valor}) 
+    modalStore.trigger(edit)
+    }}
   >
     <Icon icon="mdi:pencil-circle" width="32" height="32"/>
   </button>

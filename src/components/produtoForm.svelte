@@ -1,6 +1,8 @@
 <script lang="ts">
   import { modalStore } from "@skeletonlabs/skeleton"
-  export let produto = {id: '', nome: '', valor: ''};
+	import { produtoStore } from "../utils/stores";
+	import type { ProdutoItem } from "../utils/types";
+  export let produto: ProdutoItem;
   export let type = 'add';
   export let parent;
 
@@ -14,8 +16,7 @@
     modalStore.close()
   }
   const formData = {
-    nome: produto.nome,
-    valor: produto.valor,
+    ...$produtoStore
   }
 </script>
 <div class="bg-surface-900 px-8 py-4 rounded flex flex-col gap-4">
