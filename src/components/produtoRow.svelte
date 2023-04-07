@@ -15,7 +15,9 @@
     title: `Deletar ${produto.nome}`,
     body: `Deseja remover ${produto.nome} dos registros?`,
     response: async (r: boolean) => {
-      $delProdMutation.mutate({id: produto.id})
+      if(r) {
+        $delProdMutation.mutate({id: produto.id})
+      }
     }
   }
 
