@@ -6,3 +6,9 @@ export interface Produto {
     	valor: string;
     }[]
 }
+
+export interface ProdutoItem {
+    id: string;
+    nome: string;
+    valor: string;
+}

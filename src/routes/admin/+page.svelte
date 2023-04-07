@@ -6,8 +6,8 @@
   import ProdutoForm from '../../components/produtoForm.svelte';
   import { Paginator } from '@skeletonlabs/skeleton';
   import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
-	import { addProduto } from '../../utils/funcs';
-	import type { Produto } from '../../utils/types';
+  import { addProduto } from '../../utils/funcs';
+  import type { Produto } from '../../utils/types';
 
   const queryClient = useQueryClient()
 
@@ -48,14 +48,13 @@
   
   const formModalComp: ModalComponent = {
     ref: ProdutoForm,
-    props: { background: "variant-ghost-primary" }    
   }
 
   const prodForm: ModalSettings = {
     type: 'component',
     component: formModalComp,
-    response: async (r: {nome: string, valor: string}) => {
-      $addProdMutation.mutate({nome: r.nome, valor: r.valor})
+    response: async (r: {nome: string, valor: string, send: boolean}) => {
+      if(r.send) $addProdMutation.mutate({nome: r.nome, valor: r.valor})
     },
   };
   let page = {

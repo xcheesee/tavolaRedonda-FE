@@ -2,10 +2,10 @@
   import { modalStore, type ModalSettings, type ModalComponent } from "@skeletonlabs/skeleton";
   import Icon from "@iconify/svelte";
   import ProdutoForm from "./produtoForm.svelte";
-  import { invalidate } from "$app/navigation";
-	import { createMutation, useQueryClient } from "@tanstack/svelte-query";
-	import type { Produto } from "../utils/types";
-	import { delProduto } from "../utils/funcs";
+  //import { invalidate } from "$app/navigation";
+  import { createMutation, useQueryClient } from "@tanstack/svelte-query";
+  import type { Produto, ProdutoItem } from "../utils/types";
+  import { delProduto, editProduto } from "../utils/funcs";
   export let produto: {id: string, nome: string, valor: string}
 
   const queryClient = useQueryClient()
@@ -30,18 +30,8 @@
   const edit: ModalSettings = {
     type: 'component',
     component: editComponent,
-    response: async (r: {nome: string, valor: string}) => {
-      await fetch(`http://127.0.0.1:8000/api/produtos/${produto.id}`, {
-        method: 'PUT',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nome: r.nome,
-          valor: r.valor,
-        })
-      })
-      await invalidate('prods:get')
+    response: async (r: {nome: string, valor: string, send: boolean}) => {
+      if(r.send) $editProdMutation.mutate({id: produto.id, nome: r.nome, valor: r.valor})
     }
   }
 
@@ -54,6 +44,26 @@
         queryClient.setQueryData(['produtos'], {
           mensagem: prevProds.mensagem,
           produto: prevProds.produto.filter(ele => ele.id !== id)
+        })
+      }
+      return [prevProds]
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(['produtos'])
+    }
+  })
+  const editProdMutation = createMutation(editProduto, {
+    onMutate: async (produto: ProdutoItem) => {
+      await queryClient.cancelQueries(['produtos'])
+      const prevProds: Produto | undefined = queryClient.getQueryData(['produtos'])
+
+      if (prevProds) {
+        queryClient.setQueryData(['produtos'], {
+          mensagem: prevProds.mensagem,
+          produto: prevProds.produto.map(ele => {
+            if(ele.id !== produto.id) return ele
+            return {id: produto.id, nome: produto.nome, valor: produto.valor}
+          })
         })
       }
       return [prevProds]
