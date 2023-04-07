@@ -1,7 +1,7 @@
 <script lang="ts">
     import { Accordion, AccordionItem, modalStore, type ModalSettings, type ModalComponent } from '@skeletonlabs/skeleton';
     import type { PageData } from './$types';
-    import { invalidate } from '$app/navigation';
+    import { invalidate, invalidateAll } from '$app/navigation';
     import ProdutoTable from '../../components/produtoTable.svelte';
     import ProdutoForm from '../../components/produtoForm.svelte';
     import { Paginator } from '@skeletonlabs/skeleton';
@@ -26,7 +26,7 @@
                     valor: r.valor,
                 })
             })
-            invalidate('prods')
+            invalidate('prods:get')
         },
     };
     let produtos: Produto = data 
@@ -60,7 +60,7 @@
         <AccordionItem open>
             <svelte:fragment slot="summary">Produtos</svelte:fragment>
             <svelte:fragment slot="content">
-                <ProdutoTable produtos={produtos} />
+                <ProdutoTable produtos={data} />
                 <Paginator bind:settings={page} />
                 <div class="flex justify-end">
                     <button 

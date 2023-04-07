@@ -2,6 +2,7 @@
     import { modalStore, type ModalSettings, type ModalComponent } from "@skeletonlabs/skeleton";
     import Icon from "@iconify/svelte";
     import ProdutoForm from "./produtoForm.svelte";
+	import { invalidate } from "$app/navigation";
     export let produto: {id: string, nome: string, valor: string}
     const del: ModalSettings = {
         type: 'confirm',
@@ -14,6 +15,8 @@
                     "Content-Type": "application/json",
                 },
             })
+            await invalidate('prods:get')
+            modalStore.close()
         }
     }
     const editComponent: ModalComponent = {
@@ -35,18 +38,10 @@
                     valor: r.valor,
                 })
             })
+            await invalidate('prods:get')
         }
     }
 
-    const formData = {
-        nome: produto.nome,
-        valor: produto.valor,
-    }
-
-    function onFormSubmit(): void {
-        if ($modalStore[0].response) $modalStore[0].response(formData);
-            modalStore.close()
-    }
 </script>
 
 <td>0</td>
