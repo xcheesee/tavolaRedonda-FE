@@ -5,16 +5,27 @@
 	import '@skeletonlabs/skeleton/styles/all.css';
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
+	import { browser } from '$app/environment';
 	import { AppShell, Modal } from '@skeletonlabs/skeleton';
+	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
+	const queryClient = new QueryClient({
+		defaultOptions: {
+			queries: {
+				enabled: browser,
+			},
+		},
+	})
 </script>
-<Modal />
-<AppShell>
-	<div slot="header" class="flex justify-between px-4 py-2 items-center bg-surface-700">
+<QueryClientProvider client={queryClient}>
+	<Modal />
+	<AppShell>
+		<div slot="header" class="flex justify-between px-4 py-2 items-center bg-surface-700">
 		<div class="text-3xl"> Tavola Redonda</div>
-		<div class="flex gap-8 items-center">
-			<div class="text-xl">Ola, User</div>
-			<div>Logout</div>
+			<div class="flex gap-8 items-center">
+				<div class="text-xl">Ola, User</div>
+				<div>Logout</div>
+			</div>
 		</div>
-	</div>
-	<slot />
-</AppShell>
+		<slot />
+	</AppShell>
+</QueryClientProvider>

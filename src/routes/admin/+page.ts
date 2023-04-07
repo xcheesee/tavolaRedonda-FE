@@ -5,7 +5,7 @@ export const load = (async ({ fetch, depends }) => {
 	depends('prods:get')
 	if(res.ok) {
 		const json = await res.json()
-		return json
+		return {mensagem: json.mensagem, produto: json.produto}
 	}
 	return {mensagem: "", produto: []}
         
