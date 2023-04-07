@@ -18,6 +18,8 @@ Para executar o back-end/database dessa aplicacao em um terminal:
 - php artisan serve
 
 seguindo esses passos voce podera recuperar os dados dos produtos guardados no banco a partir de seu front-end
+
+***LEMBRE-SE QUE A APLICACAO SO FUNCIONARA CORRETAMENTE SE AMBOS AMBIENTES ESTIVEREM CONFIGURADOS E EXECUTANDO EM UMA PORTA DE SUA MAQUINA***
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
