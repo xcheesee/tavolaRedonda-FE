@@ -1,3 +1,21 @@
+# Tavola Redonda
+## Executando front-end
+
+Para executar o front-end dessa aplicacao em um terminal:
+- git clone https://github.com/xcheesee/tavolaRedonda-FE.git
+- cd tavolaRedonda-FE
+- npm i
+- npm run dev --open
+seguindo esses passos voce podera abrir o navegador e ir ao caminho http://localhost:5173/admin para utilizar o modulo administrativo
+
+## Executando back-end
+Para executar o back-end/database dessa aplicacao em um terminal:
+- git clone https:github.com/kageofwar/A-Tavola-Redonda-API.git
+- cd A-Tavola-Redonda-API
+- composer install
+- composer update
+- php artisan serve
+seguindo esses passos voce podera recuperar os dados dos produtos guardados no banco a partir de seu front-end
 # create-svelte
 
 Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
