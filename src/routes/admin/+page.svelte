@@ -1,30 +1,12 @@
 <script lang="ts">
     import { Accordion, AccordionItem, modalStore, type ModalSettings, type ModalComponent } from '@skeletonlabs/skeleton';
-    import type { PageData } from '../$types';
+    import type { PageData } from './$types';
     import { invalidate } from '$app/navigation';
-    import type { Produto } from '../../utils/types';
     import ProdutoTable from '../../components/produtoTable.svelte';
     import ProdutoForm from '../../components/produtoForm.svelte';
     import { Paginator } from '@skeletonlabs/skeleton';
+    import type { Produto } from '../../utils/types';
     export let data: PageData;
-    //const produtos: Produto[] = [
-    //    {
-    //        id: "0",
-    //        nome: "Hamburger",
-    //        valor: "15.99",
-    //    },
-    //    {
-    //        id: "0",
-    //        nome: "Hamburger",
-    //        valor: "15.99",
-    //    },
-    //    {
-    //        id: "0",
-    //        nome: "Hamburger",
-    //        valor: "15.99",
-    //    },
-    //]
-
     const formModalComp: ModalComponent = {
         ref: ProdutoForm,
         props: { background: "variant-ghost-primary" }    
@@ -34,7 +16,7 @@
         type: 'component',
         component: formModalComp,
         response: async (r: {nome: string, valor: string}) => {
-            await fetch("http://localhost:8000/api/produtos", {
+            await fetch(`http://localhost:8000/api/produtos`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -47,7 +29,7 @@
             invalidate('prods')
         },
     };
-    let produtos = data //getProdutos()
+    let produtos: Produto = data 
     let page = {
         offset: 0,
         limit: 5,
@@ -78,10 +60,7 @@
         <AccordionItem open>
             <svelte:fragment slot="summary">Produtos</svelte:fragment>
             <svelte:fragment slot="content">
-                {#await produtos}
-                <div>Carregando...</div>
-                {:then prods}
-                <ProdutoTable produtos={prods} />
+                <ProdutoTable produtos={produtos} />
                 <Paginator bind:settings={page} />
                 <div class="flex justify-end">
                     <button 
@@ -95,7 +74,6 @@
                         Add
                     </button>
                 </div>
-                {/await}
             </svelte:fragment>
         </AccordionItem>
     </Accordion>

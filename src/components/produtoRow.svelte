@@ -24,16 +24,15 @@
     const edit: ModalSettings = {
         type: 'component',
         component: editComponent,
-        response: async (r: {id: string, nome: string, valor: string}) => {
-            await fetch('http://127.0.0.1:8000/api/produtos', {
+        response: async (r: {nome: string, valor: string}) => {
+            await fetch(`http://127.0.0.1:8000/api/produtos/${produto.id}`, {
                 method: 'PUT',
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    id: produto.id,
-                    nome: produto.nome,
-                    valor: produto.valor,
+                    nome: r.nome,
+                    valor: r.valor,
                 })
             })
         }

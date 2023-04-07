@@ -5,7 +5,7 @@
     export let parent;
     function onFormSubmit(): void {
         if($modalStore[0].response) $modalStore[0].response(formData)
-        console.log($modalStore[0].response)
+        modalStore.close()
     }
     const formData = {
         nome: produto.nome,
