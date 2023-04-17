@@ -24,7 +24,7 @@
       qtd = 0;
     }}	  
   >
-    <div> R$ {qtd === 0 ? produto.valor : +produto.valor * qtd} </div>
+    <div> R$ {qtd === 0 || isNaN(qtd) ? produto.valor : +produto.valor * qtd} </div>
     <input type="number" name="qtd" class="input w-24" pattern="\d" maxlength="3"bind:value={qtd}/>
     <button class="btn variant-filled-primary" type="submit">Adicionar </button>
   </form >
