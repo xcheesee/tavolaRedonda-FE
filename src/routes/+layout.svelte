@@ -35,6 +35,7 @@
 			<div class="flex gap-8 items-center">
 				<div class="text-xl">Ola, User</div>
 				<div>Logout</div>
+				<div>texte</div>
 			</div>
 		</div>
 		<slot />
