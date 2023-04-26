@@ -20,12 +20,14 @@
 	})
 
 	const modalComponentRegistry: Record<string, ModalComponent> = {
-		formModal: {
+		prodFormModal: {
 			ref: ProdutoForm,
 			props: {produto: $produtoStore},
 			slot: '<p>Pog</p>'
 		}
 	}
+
+	const usuario = true;
 </script>
 <QueryClientProvider client={queryClient}>
 	<Modal components={modalComponentRegistry}/>
@@ -35,7 +37,6 @@
 			<div class="flex gap-8 items-center">
 				<div class="text-xl">Ola, User</div>
 				<div>Logout</div>
-				<div>texte</div>
 			</div>
 		</div>
 		<slot />

@@ -7,7 +7,6 @@
   export let parent;
 
   function onFormSubmit() {
-    console.log($modalStore[0])
     if($modalStore[0].response) $modalStore[0].response({...formData, send: true})
     modalStore.close()
   }
@@ -34,8 +33,20 @@
     <input type="text" class="input" placeholder="Big Mac" bind:value={formData.nome}/>
   </label>
   <label >
+    <span>Descricao</span>
+    <textarea class="textarea" placeholder="Dois Hamburgeres, alface, queijo, molho especial, cebola e picles no pao com gergelim" bind:value={formData.descricao}/>
+  </label>
+  <label >
     <span>Valor</span>
     <input type="text" class="input" placeholder="Big Mac" bind:value={formData.valor}/>
+  </label>
+  <label >
+    <span>Categoria</span>
+    <select  class="select" bind:value={formData.categoria_id}>
+      <option value="1">Sanduiches</option>
+      <option value="2">Bebidas</option>
+      <option value="3">Executivos</option>
+    </select>
   </label>
   <div class="flex gap-4">
     <button 

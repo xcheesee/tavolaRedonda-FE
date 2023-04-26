@@ -5,7 +5,11 @@
   import type { Produto, ProdutoItem } from "../utils/types";
   import { delProduto, editProduto } from "../utils/funcs";
   import { produtoStore } from "../utils/stores";
-  export let produto: {id: string, nome: string, valor: string}
+  export let produto: ProdutoItem
+  
+  interface prodEditModal extends ProdutoItem {
+    send: boolean
+  }
 
   const queryClient = useQueryClient()
 
@@ -19,8 +23,8 @@
   const edit: ModalSettings = {
     type: 'component',
     component: 'formModal',
-    response: async (r: {nome: string, valor: string, send: boolean}) => {
-      if(r.send) $editProdMutation.mutate({id: produto.id, nome: r.nome, valor: r.valor})
+    response: async (r: prodEditModal) => {
+      if(r.send) $editProdMutation.mutate({...r, id: produto.id})
     }
   }
 
@@ -50,7 +54,7 @@
           mensagem: prevProds.mensagem,
           produto: prevProds.produto.map(ele => {
             if(ele.id !== produto.id) return ele
-            return {id: produto.id, nome: produto.nome, valor: produto.valor}
+            return {...produto}
           })
         })
       }
@@ -68,7 +72,7 @@
   <button 
     type="button"
     on:click={() => {
-    produtoStore.set({id: produto.id, nome: produto.nome, valor: produto.valor}) 
+    produtoStore.set({...produto}) 
     modalStore.trigger(edit)
     }}
   >

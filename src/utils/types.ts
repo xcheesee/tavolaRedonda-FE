@@ -1,14 +1,12 @@
 export interface Produto {
     mensagem: string
-    produto: {
-	id: string;
-    	nome: string;
-    	valor: string;
-    }[]
+    produto: ProdutoItem[]
 }
 
 export interface ProdutoItem {
     id: string;
     nome: string;
     valor: string;
+    descricao: string;
+    categoria_id: string;
 }

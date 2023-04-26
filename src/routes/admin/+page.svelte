@@ -10,12 +10,12 @@
 
   const queryClient = useQueryClient()
 
-  export let data: PageData
+  //export let data: PageData
 
   const produtoQuery = createQuery({
     queryKey: ['produtos'],
     queryFn: async () => await ( await fetch('http://127.0.0.1:8000/api/produtos') ).json(),
-    initialData: data,
+    //initialData: data,
   })
   
   const addProdMutation = createMutation(addProduto, {
@@ -45,7 +45,7 @@
 
   const prodForm: ModalSettings = {
     type: 'component',
-    component: 'formModal',
+    component: 'prodFormModal',
     response: async (r: {nome: string, valor: string, send: boolean}) => {
       if(r.send) $addProdMutation.mutate({nome: r.nome, valor: r.valor})
     },
@@ -93,7 +93,7 @@
             type="button" 
             class="btn variant-ghost-primary rounded-xl"
             on:click={() => {
-            produtoStore.set({id: "", nome: "", valor: ""})
+            produtoStore.set({id: "", nome: "", valor: "", categoria_id: "", descricao: ""})
             modalStore.trigger(prodForm);
             }}
             on:keypress={() => {}}
