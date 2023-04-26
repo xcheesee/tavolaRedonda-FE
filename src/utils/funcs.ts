@@ -1,6 +1,6 @@
 import type { ProdutoItem } from "./types"
 
-export async function addProduto ({nome, valor, descricao, categoria_id}: ProdutoItem) {
+export async function addProduto ({nome, valor, descricao, categoria}: ProdutoItem) {
   const res = await fetch(`http://localhost:8000/api/produtos`, {
     method: "POST",
     headers: {
@@ -10,7 +10,7 @@ export async function addProduto ({nome, valor, descricao, categoria_id}: Produt
       nome: nome,
       valor: valor,
       descricao: descricao,
-      categoria_id: categoria_id
+      categoria_id: categoria.id
     })
   })
   if(res.ok) {
@@ -41,7 +41,7 @@ export async function editProduto(produto: ProdutoItem) {
       nome: produto.nome,
       valor: produto.valor,
       descricao: produto.descricao,
-      categoria_id: produto.categoria_id
+      categoria_id: produto.categoria.id
     })
   })
 
@@ -50,3 +50,8 @@ export async function editProduto(produto: ProdutoItem) {
   }
   return res
 }
+export function multiplyNum(num: string, multiplier: number): string {
+    const parsedFloat = +num.replace(",", ".")
+    const newNum = `${parsedFloat * multiplier}`;
+    return newNum.replace(".", ",")
+  }

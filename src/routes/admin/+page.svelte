@@ -1,17 +1,17 @@
 <script lang="ts">
-  import type { PageData } from './$types';
+  import type { PageServerData } from './$types';
   import { Accordion, AccordionItem, modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
-  import ProdutoTable from '../../components/produtoTable.svelte';
+  import ProdutoTable from '../../components/produtoTable.svelte'
   import { Paginator } from '@skeletonlabs/skeleton';
   import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { addProduto } from '../../utils/funcs';
   import type { Produto, ProdutoItem, prodModal } from '../../utils/types';
-  import { produtoStore } from '../../utils/stores';
-	import ProdutoForm from '../../components/produtoForm.svelte';
+  import { produtoStore, categoriasStore } from '../../utils/stores';
 
   const queryClient = useQueryClient()
 
-  export let data: PageData
+  export let data: PageServerData
+  $categoriasStore = data.categorias
 
   const produtoQuery = createQuery({
     queryKey: ['produtos'],
@@ -20,7 +20,7 @@
   })
   
   const addProdMutation = createMutation(addProduto, {
-    onMutate: async ({nome, valor, descricao, categoria_id}: ProdutoItem) => {
+    onMutate: async ({nome, valor, descricao, categoria}: ProdutoItem) => {
       await queryClient.cancelQueries(['produtos'])
       const prevProds: Produto | undefined = queryClient.getQueryData(['produtos'])
 
@@ -34,7 +34,7 @@
               nome: nome,
               valor: valor,
               descricao: descricao,
-              categoria_id: categoria_id,
+              categoria: categoria
             }
           ]
         })
@@ -88,7 +88,7 @@
         {#if $produtoQuery.isLoading}
         <div>Carregando...</div>
         {:else }
-        <ProdutoTable produtos={$produtoQuery.data} />
+        <ProdutoTable produtos={$produtoQuery.data} categorias={data.categorias} />
         {/if}
         <Paginator bind:settings={page} />
         <div class="flex justify-end">
@@ -96,7 +96,7 @@
             type="button" 
             class="btn variant-ghost-primary rounded-xl"
             on:click={() => {
-            produtoStore.set({id: "", nome: "", valor: "", categoria_id: "", descricao: ""})
+            produtoStore.set({id: "", nome: "", valor: "", categoria: {id: "", nome: ""}, descricao: ""})
             modalStore.trigger(prodForm);
             }}
             on:keypress={() => {}}

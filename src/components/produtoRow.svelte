@@ -4,7 +4,7 @@
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import type { Produto, ProdutoItem, prodModal } from "../utils/types";
   import { delProduto, editProduto } from "../utils/funcs";
-  import { produtoStore } from "../utils/stores";
+  import { produtoStore, categoriasStore } from "../utils/stores";
   export let produto: ProdutoItem
   
 
@@ -19,7 +19,7 @@
 
   const edit: ModalSettings = {
     type: 'component',
-    component: 'formModal',
+    component: 'prodFormModal',
     response: async (r: prodModal) => {
       if(r.send) $editProdMutation.mutate({...r, id: produto.id})
     }
@@ -63,8 +63,10 @@
 </script>
 
 <td>{produto.id}</td>
-<td class="w-3/4">{produto.nome}</td>
+<td>{produto.nome}</td>
+<td>{produto.descricao}</td>
 <td>R$ {produto.valor}</td>
+<td>{produto.categoria.nome}</td>
 <td>
   <button 
     type="button"

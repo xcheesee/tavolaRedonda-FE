@@ -8,9 +8,18 @@ export interface ProdutoItem {
     nome: string;
     valor: string;
     descricao: string;
-    categoria_id: string;
+    categoria: Categoria;
 }
 
 export interface prodModal extends ProdutoItem {
   send: boolean
+}
+
+export interface CarrinhoItem extends ProdutoItem {
+		qtd: number
+}
+
+export interface Categoria {
+		id: string;
+		nome: string;
 }

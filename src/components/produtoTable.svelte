@@ -1,7 +1,8 @@
 <script lang="ts">
-  import type { Produto } from "../utils/types";
+  import type { Categoria, Produto } from "../utils/types";
   import ProdutoRow from "./produtoRow.svelte";
   export let produtos: Produto;
+  export let categorias: Categoria[];
 </script>
 <div class="table-container">
   <table class="table table-hover">
@@ -9,7 +10,9 @@
       <tr class="variant-ghost-primary">
         <th>Id</th>
         <th>Nome</th>
+        <th>Descricao</th>
         <th>Valor</th>
+        <th>Categoria</th>
         <th>Acao</th>
       </tr>
     </thead>

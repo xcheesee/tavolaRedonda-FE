@@ -22,12 +22,10 @@
 	const modalComponentRegistry: Record<string, ModalComponent> = {
 		prodFormModal: {
 			ref: ProdutoForm,
-			props: {produto: $produtoStore},
 			slot: '<p>Pog</p>'
 		}
 	}
 
-	const usuario = true;
 </script>
 <QueryClientProvider client={queryClient}>
 	<Modal components={modalComponentRegistry}/>
