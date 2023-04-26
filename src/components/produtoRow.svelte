@@ -2,14 +2,11 @@
   import { modalStore, type ModalSettings } from "@skeletonlabs/skeleton";
   import Icon from "@iconify/svelte";
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
-  import type { Produto, ProdutoItem } from "../utils/types";
+  import type { Produto, ProdutoItem, prodModal } from "../utils/types";
   import { delProduto, editProduto } from "../utils/funcs";
   import { produtoStore } from "../utils/stores";
   export let produto: ProdutoItem
   
-  interface prodEditModal extends ProdutoItem {
-    send: boolean
-  }
 
   const queryClient = useQueryClient()
 
@@ -23,7 +20,7 @@
   const edit: ModalSettings = {
     type: 'component',
     component: 'formModal',
-    response: async (r: prodEditModal) => {
+    response: async (r: prodModal) => {
       if(r.send) $editProdMutation.mutate({...r, id: produto.id})
     }
   }

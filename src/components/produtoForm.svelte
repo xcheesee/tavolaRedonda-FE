@@ -17,6 +17,11 @@
   const formData = {
     ...$produtoStore
   }
+  interface categoria {
+    id: string;
+    nome: string
+  }
+  const categoria = async (): Promise<{mensagem: string, categorias: categoria[]}> => await (await fetch("http://127.0.0.1:8000/api/categoria")).json()
 </script>
 <div class="bg-surface-900 px-8 py-4 rounded flex flex-col gap-4">
   {#if type === 'add'}
@@ -28,26 +33,30 @@
       Editar Produto #{produto.id}
     </div>
   {/if} 
-  <label >
+  <label>
     <span>Nome</span>
     <input type="text" class="input" placeholder="Big Mac" bind:value={formData.nome}/>
   </label>
-  <label >
+  <label>
     <span>Descricao</span>
     <textarea class="textarea" placeholder="Dois Hamburgeres, alface, queijo, molho especial, cebola e picles no pao com gergelim" bind:value={formData.descricao}/>
   </label>
-  <label >
+  <label>
     <span>Valor</span>
     <input type="text" class="input" placeholder="Big Mac" bind:value={formData.valor}/>
   </label>
-  <label >
+  {#await categoria()}
+  <div>Carregando...</div>
+  {:then cat}
+  <label>
     <span>Categoria</span>
     <select  class="select" bind:value={formData.categoria_id}>
-      <option value="1">Sanduiches</option>
-      <option value="2">Bebidas</option>
-      <option value="3">Executivos</option>
+      {#each cat.categorias as value}
+      <option value={value.id}>{value.nome}</option>
+      {/each}
     </select>
   </label>
+  {/await}
   <div class="flex gap-4">
     <button 
       type="button" 

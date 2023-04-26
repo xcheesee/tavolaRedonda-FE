@@ -10,3 +10,7 @@ export interface ProdutoItem {
     descricao: string;
     categoria_id: string;
 }
+
+export interface prodModal extends ProdutoItem {
+  send: boolean
+}

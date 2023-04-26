@@ -1,6 +1,6 @@
 import type { ProdutoItem } from "./types"
 
-export async function addProduto ({nome, valor}: {nome: string, valor: string}) {
+export async function addProduto ({nome, valor, descricao, categoria_id}: ProdutoItem) {
   const res = await fetch(`http://localhost:8000/api/produtos`, {
     method: "POST",
     headers: {
@@ -9,6 +9,8 @@ export async function addProduto ({nome, valor}: {nome: string, valor: string}) 
     body: JSON.stringify({
       nome: nome,
       valor: valor,
+      descricao: descricao,
+      categoria_id: categoria_id
     })
   })
   if(res.ok) {
@@ -38,6 +40,8 @@ export async function editProduto(produto: ProdutoItem) {
     body: JSON.stringify({
       nome: produto.nome,
       valor: produto.valor,
+      descricao: produto.descricao,
+      categoria_id: produto.categoria_id
     })
   })
 

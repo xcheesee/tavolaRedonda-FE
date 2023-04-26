@@ -5,21 +5,22 @@
   import { Paginator } from '@skeletonlabs/skeleton';
   import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { addProduto } from '../../utils/funcs';
-  import type { Produto } from '../../utils/types';
+  import type { Produto, ProdutoItem, prodModal } from '../../utils/types';
   import { produtoStore } from '../../utils/stores';
+	import ProdutoForm from '../../components/produtoForm.svelte';
 
   const queryClient = useQueryClient()
 
-  //export let data: PageData
+  export let data: PageData
 
   const produtoQuery = createQuery({
     queryKey: ['produtos'],
     queryFn: async () => await ( await fetch('http://127.0.0.1:8000/api/produtos') ).json(),
-    //initialData: data,
+    initialData: data,
   })
   
   const addProdMutation = createMutation(addProduto, {
-    onMutate: async ({nome, valor}: {nome: string, valor: string}) => {
+    onMutate: async ({nome, valor, descricao, categoria_id}: ProdutoItem) => {
       await queryClient.cancelQueries(['produtos'])
       const prevProds: Produto | undefined = queryClient.getQueryData(['produtos'])
 
@@ -32,6 +33,8 @@
               id: "definindo...",
               nome: nome,
               valor: valor,
+              descricao: descricao,
+              categoria_id: categoria_id,
             }
           ]
         })
@@ -46,8 +49,8 @@
   const prodForm: ModalSettings = {
     type: 'component',
     component: 'prodFormModal',
-    response: async (r: {nome: string, valor: string, send: boolean}) => {
-      if(r.send) $addProdMutation.mutate({nome: r.nome, valor: r.valor})
+    response: async (r: prodModal) => {
+      if(r.send) $addProdMutation.mutate({...r})
     },
   };
 
