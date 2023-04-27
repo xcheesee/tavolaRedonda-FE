@@ -32,13 +32,18 @@
       if (prevPeds) {
         queryClient.setQueryData(['pedidos'], {
           mensagem: prevPeds.mensagem,
-          pedidos: prevPeds.pedidos.filter(ele => ele.id !== id)
+          pedidos: [...prevPeds.pedidos.filter(ele => +ele.id !== +id)]
         })
       }
-      return [prevPeds]
+      return {...prevPeds}
     },
     onSettled: () => queryClient.invalidateQueries(['pedidos']),
-    onError: () => toastStore.trigger(failDelToast),
+    onError: (context: any) => {
+      toastStore.trigger(failDelToast)
+      if (context?.prevPeds) {
+        queryClient.setQueryData(['pedidos'], context.prevPeds)
+      }
+    },
     onSuccess: () => toastStore.trigger(delToast)
   })
 
@@ -47,7 +52,7 @@
   <div>Carregando...</div>
 {:else}
   <div class="grid grid-flow-col auto-cols-[400px] px-8 py-8 gap-8">
-    {#each data.pedidos as pedido}
+    {#each $pedidosQuery.data.pedidos as pedido}
       <div class="card p-4 grid grid-cols-3 gap-4 self-start">
         <p class="text-xl text-neutral-300">Pedido N#{pedido.id}</p>
         {#if pedido.Status === 0}
