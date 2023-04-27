@@ -1,4 +1,4 @@
-import type { ProdutoItem } from "./types"
+import type { CarrinhoItem, ProdutoItem } from "./types"
 
 export async function addProduto ({nome, valor, descricao, categoria}: ProdutoItem) {
   const res = await fetch(`http://localhost:8000/api/produtos`, {
@@ -51,6 +51,29 @@ export async function editProduto(produto: ProdutoItem) {
   return res
 }
 
+export async function finalizarPedido(carrinho: {[key:string]: CarrinhoItem}) {
+  const res = await fetch("http://127.0.0.1:8000/api/pedidos", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      cliente_id: 1,
+      Status: 0,
+      forma_pagamento: "Dinheiro",
+      itens: Object.values(carrinho).map(val => ({
+        produto_id: val.id, 
+        quantidade: val.qtd,
+      }))
+    })
+  })
+
+  if(res.ok) {
+    return {ok: true, res: res.status}
+  }
+  throw {message: "Nao foi possivel finalizar a compra :(", status: res.status}
+}
+
 export async function delPedido(pedido_id: string) {
   const res = await fetch(`http://127.0.0.1:8000/api/pedidos/${pedido_id}`, {
     method: "DELETE",
@@ -62,7 +85,7 @@ export async function delPedido(pedido_id: string) {
 
 }
 export function multiplyNum(num: string, multiplier: number): string {
-    const parsedFloat = +num.replace(",", ".")
-    const newNum = `${(parsedFloat * multiplier).toFixed(2)}`;
-    return newNum.replace(".", ",")
-  }
+  const parsedFloat = +num.replace(",", ".")
+  const newNum = `${(parsedFloat * multiplier).toFixed(2)}`;
+  return newNum.replace(".", ",")
+}

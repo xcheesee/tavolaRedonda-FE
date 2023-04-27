@@ -5,6 +5,7 @@
 	import { carrinhoStore } from "../../../utils/stores";
 	import { goto } from "$app/navigation";
 	import { error } from "@sveltejs/kit";
+	import { finalizarPedido } from "../../../utils/funcs";
 
 	function getTotal(val: string, multiplier: number): number {
 		const formattedVal = +val.replace(",", ".")
@@ -41,34 +42,18 @@
 			<div class="flex justify-between">
 				<div> Total: R${current} </div>
 				<div>
-				<button class="btn variant-ghost-warning" on:click={() => $carrinhoStore = {}}> Limpar Carrinho </button>
-				<button class="btn variant-ghost-success" on:click={async () => {
-					const res = await fetch("http://127.0.0.1:8000/api/pedidos", {
-					method: "POST",
-					headers: {
-					"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-					cliente_id: 1,
-					Status: 0,
-					forma_pagamento: "Dinheiro",
-					itens: Object.values($carrinhoStore).map(val => ({
-					produto_id: val.id, 
-					quantidade: val.qtd,
-					}))
-					})
-					})
+					<button class="btn variant-ghost-warning" on:click={() => $carrinhoStore = {}}> Limpar Carrinho </button>
+					<button class="btn variant-ghost-success" on:click={async () => {
+						const res = await finalizarPedido($carrinhoStore)
+						if(!res.ok) {
+						return toastStore.trigger(errorToast)
+						}
+						$carrinhoStore = {}
+						toastStore.trigger(confToast)
 
-					if(!res.ok) {
-					return toastStore.trigger(errorToast)
-					}
-
-					$carrinhoStore = {}
-					toastStore.trigger(confToast)
-
-					return goto("/menu")
-				}}>Finalizar Compra</button>
-																																																																																																																																																																																										    </div>
+						return goto("/menu")
+					}}>Finalizar Compra</button>
+				</div>
 			</div>
 		{/if}
 	</div>
