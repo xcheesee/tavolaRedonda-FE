@@ -51,9 +51,9 @@
 {#if $pedidosQuery.isLoading}
   <div>Carregando...</div>
 {:else}
-  <div class="grid grid-flow-col auto-cols-[400px] px-8 py-8 gap-8">
+  <div class="flex px-8 py-8 gap-8 flex-wrap">
     {#each $pedidosQuery.data.pedidos as pedido}
-      <div class="card p-4 grid grid-cols-3 gap-4 self-start">
+      <div class="card p-4 grid grid-cols-3 gap-4 self-start ">
         <p class="text-xl text-neutral-300">Pedido N#{pedido.id}</p>
         {#if pedido.Status === 0}
           <p class="text-red-500 col-start-3">Em andamento</p>
