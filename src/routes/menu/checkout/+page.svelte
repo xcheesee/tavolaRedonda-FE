@@ -1,8 +1,10 @@
 <script lang="ts">
-	import { redirect } from "@sveltejs/kit";
+	import type { ToastSettings } from "@skeletonlabs/skeleton";
+	import { toastStore } from "@skeletonlabs/skeleton";
 	import CheckoutItemCard from "../../../components/CheckoutItemCard.svelte";
 	import { carrinhoStore } from "../../../utils/stores";
 	import { goto } from "$app/navigation";
+	import { error } from "@sveltejs/kit";
 
   function getTotal(val: string, multiplier: number): number {
 		const formattedVal = +val.replace(",", ".")
@@ -10,10 +12,19 @@
 		return total
 	}
 
-	function calculaTotal() {
-		//tot = Object.values(carrinho).reduce((acc, curr) => acc + getTotal(curr.valor, curr.qtd), 0).toFixed(2)
-	}
 	$: current = Object.values($carrinhoStore).reduce((acc, curr) => acc + getTotal(curr.valor, curr.qtd), 0).toFixed(2)
+
+	const confToast: ToastSettings = {
+		message: "Pedido enviado com sucesso!",
+		background: "variant-ghost-success",
+		timeout: 5000,
+	}
+
+	const errorToast: ToastSettings = {
+		message: "Houve um erro no envio :(",
+		background: "variant-ghost-error",
+		timeout: 5000,
+	}
 
 </script>
 <div class="flex justify-center">
@@ -25,7 +36,7 @@
 			</div>
 		{:else}
 			{#each Object.values($carrinhoStore) as item}
-				<CheckoutItemCard item={item} calculaTotal={calculaTotal} />
+				<CheckoutItemCard item={item} />
 			{/each}
 			<div class="flex justify-between">
 			  <div> Total: R${current} </div>
@@ -47,13 +58,13 @@
 					})
 					
 					if(!res.ok) {
-						alert("Houve um erro no envio :(")
+						return toastStore.trigger(errorToast)
 					}
 
-					if(confirm("Pedido enviado com sucesso!")) {
-						$carrinhoStore = {}
-						goto("/menu")
-					}
+					$carrinhoStore = {}
+					toastStore.trigger(confToast)
+
+					return goto("/menu")
 				}}>Finalizar Compra</button>
 			</div>
 		{/if}

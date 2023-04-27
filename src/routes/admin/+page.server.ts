@@ -5,7 +5,6 @@ export const load = (async ({ fetch, depends }) => {
 	if(prodRes.ok && catRes.ok) {
 		const prodJson = await prodRes.json()
 		const catJson = await catRes.json()
-		console.log(prodJson, catJson)
 		return {mensagem: prodJson.mensagem, produto: prodJson.produto, categorias: catJson["categorias:"]}
 	}
 	return {mensagem: "", produto: [], categorias: []}

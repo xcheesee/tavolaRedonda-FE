@@ -3,7 +3,6 @@
   import { multiplyNum } from "../utils/funcs";
 	import { carrinhoStore } from "../utils/stores";
   export let item: CarrinhoItem
-  export let calculaTotal: () => void;
   let qtd = item.qtd;
 
 </script>
@@ -18,7 +17,6 @@
     on:submit={e => {
       e.preventDefault();
       $carrinhoStore = {...$carrinhoStore, [item.id]: {id: item.id, nome: item.nome, valor: item.valor, descricao: item.descricao, categoria: item.categoria, qtd: qtd}}
-      calculaTotal()
     }}	  
   >
     <div> R$ {qtd === 0 ? item.valor : multiplyNum(item.valor, qtd)} </div>

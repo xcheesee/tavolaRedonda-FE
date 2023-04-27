@@ -52,6 +52,6 @@ export async function editProduto(produto: ProdutoItem) {
 }
 export function multiplyNum(num: string, multiplier: number): string {
     const parsedFloat = +num.replace(",", ".")
-    const newNum = `${parsedFloat * multiplier}`;
+    const newNum = `${(parsedFloat * multiplier).toFixed(2)}`;
     return newNum.replace(".", ",")
   }

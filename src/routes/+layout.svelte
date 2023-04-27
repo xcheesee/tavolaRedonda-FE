@@ -6,7 +6,7 @@
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
 	import { browser } from '$app/environment';
-	import { AppShell, Modal, type ModalComponent } from '@skeletonlabs/skeleton';
+	import { AppShell, Modal, type ModalComponent, Toast } from '@skeletonlabs/skeleton';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import ProdutoForm from '../components/produtoForm.svelte';
 	import { produtoStore } from '../utils/stores';
@@ -29,6 +29,7 @@
 </script>
 <QueryClientProvider client={queryClient}>
 	<Modal components={modalComponentRegistry}/>
+	<Toast />
 	<AppShell>
 		<div slot="header" class="flex justify-between px-4 py-2 items-center bg-surface-700">
 		<div class="text-3xl"> Tavola Redonda</div>
