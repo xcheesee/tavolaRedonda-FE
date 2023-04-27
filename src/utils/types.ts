@@ -11,15 +11,46 @@ export interface ProdutoItem {
     categoria: Categoria;
 }
 
+export interface PedidoProduto extends ProdutoItem {
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Cliente {
+    id: string;
+    nome: string;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface prodModal extends ProdutoItem {
-  send: boolean
+    send: boolean
 }
 
 export interface CarrinhoItem extends ProdutoItem {
-		qtd: number
+    qtd: number
 }
 
 export interface Categoria {
-		id: string;
-		nome: string;
+    id: string;
+    nome: string;
+    created_at?: string | undefined | null;
+    updated_at?: string | undefined | null;
+}
+
+export interface Pedido {
+    id: string;
+    cliente_id: string;
+    Status: string;
+    forma_pagamento: string;
+    created_at: string;
+    updated_at: string;
+    cliente: Cliente;
+    produto: PedidoProduto;
+    categoria: Categoria;
+}
+
+export interface PedidoQuery {
+    mensagem: string;
+    pedidos: Pedido[];
 }

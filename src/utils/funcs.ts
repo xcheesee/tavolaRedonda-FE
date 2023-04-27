@@ -50,6 +50,17 @@ export async function editProduto(produto: ProdutoItem) {
   }
   return res
 }
+
+export async function delPedido(pedido_id: string) {
+  const res = await fetch(`http://127.0.0.1:8000/api/pedidos/${pedido_id}`, {
+    method: "DELETE",
+  })
+  if(res.ok) {
+    return {ok: true, status: res.status}
+  }
+  throw {status: res.status, message: "Nao foi possivel enviar o pedido :("}
+
+}
 export function multiplyNum(num: string, multiplier: number): string {
     const parsedFloat = +num.replace(",", ".")
     const newNum = `${(parsedFloat * multiplier).toFixed(2)}`;
