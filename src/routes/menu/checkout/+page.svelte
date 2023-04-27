@@ -24,7 +24,25 @@
 			{/each}
 			<div class="flex justify-between">
 			  <div> Total: R${current} </div>
-				<button class="btn variant-ghost-success">Finalizar Compra</button>
+				<button class="btn variant-ghost-success" on:click={async () => {
+					const res = await fetch("http://127.0.0.1:8000/api/pedidos", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({
+							cliente_id: 1,
+							Status: 0,
+							forma_pagamento: "Dinheiro",
+							itens: Object.values($carrinhoStore).map(val => ({
+								produto_id: val.id, 
+								quantidade: val.qtd,
+							}))
+						})
+					})
+					
+					if(res.ok) alert("Pedido enviado com sucesso!")
+				}}>Finalizar Compra</button>
 			</div>
 		{/if}
 	</div>
