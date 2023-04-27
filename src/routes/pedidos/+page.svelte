@@ -1,4 +1,6 @@
 <script lang="ts">
+	import Icon from "@iconify/svelte";
+
     export let data;
     console.log(data)
 </script>
@@ -12,16 +14,19 @@
       <p class="text-green-500 col-start-3">Finalizado</p>
       {/if}
       <p>Itens:</p>
-      <div class="grid col-span-3 divide-y rounded border border-primary-900 py-2 bg-primary-700">
+      <div class="grid col-span-3 divide-y divide-inherit rounded border border-primary-900 bg-primary-700">
       {#each pedido.pedido_itens as item}
-        <div class="grid grid-cols-[1fr_max-content] px-6 py-2">
+        <div class="grid grid-cols-[1fr_max-content] px-6 py-4">
           <div class="text-neutral-200">{item.produto.nome}</div>
           <div class="text-primary-400 col-start-1">{item.produto.descricao}</div>
           <div class="ol-start-2 self-center justify-self-center">R$ {item.produto.valor} * {item.quantidade} un</div>
         </div>
       {/each}
       </div>
-      <div class="pt-8 col-span-3 text-center">Pagamento: {pedido.forma_pagamento}</div>
+      <div class="pt-8 col-span-2 text-center">Pagamento: {pedido.forma_pagamento}</div>
+      {#if pedido.Status !== 1}
+      <button class="icon-btn text-center bg-red-600"> cancel <Icon icon="material-symbols:cancel-outline" /></button>
+      {/if}
     </div>
   {/each}
 </div>
