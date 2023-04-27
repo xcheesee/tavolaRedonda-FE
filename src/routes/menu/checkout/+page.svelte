@@ -46,7 +46,7 @@
 					<button class="btn variant-ghost-success" on:click={async () => {
 						const res = await finalizarPedido($carrinhoStore)
 						if(!res.ok) {
-						return toastStore.trigger(errorToast)
+							return toastStore.trigger(errorToast)
 						}
 						$carrinhoStore = {}
 						toastStore.trigger(confToast)
