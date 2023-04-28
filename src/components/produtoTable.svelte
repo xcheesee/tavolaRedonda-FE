@@ -2,7 +2,6 @@
   import type { Categoria, Produto } from "../utils/types";
   import ProdutoRow from "./produtoRow.svelte";
   export let produtos: Produto;
-  export let categorias: Categoria[];
 </script>
 <div class="table-container">
   <table class="table table-hover">

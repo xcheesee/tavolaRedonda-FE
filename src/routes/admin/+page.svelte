@@ -88,7 +88,7 @@
         {#if $produtoQuery.isLoading}
         <div>Carregando...</div>
         {:else }
-        <ProdutoTable produtos={$produtoQuery.data} categorias={data.categorias} />
+        <ProdutoTable produtos={$produtoQuery.data} />
         {/if}
         <Paginator bind:settings={page} />
         <div class="flex justify-end">

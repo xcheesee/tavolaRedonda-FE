@@ -4,7 +4,7 @@
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import type { Produto, ProdutoItem, prodModal } from "../utils/types";
   import { delProduto, editProduto } from "../utils/funcs";
-  import { produtoStore, categoriasStore } from "../utils/stores";
+  import { produtoStore } from "../utils/stores";
   export let produto: ProdutoItem
   
 

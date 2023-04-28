@@ -6,6 +6,6 @@ export const load = (async ({ fetch, depends }) => {
 		const [prodJson, catJson] = await Promise.all([prodRes.json(), catRes.json()])
 		return {mensagem: prodJson.mensagem, produto: prodJson.produto, categorias: catJson.categorias}
 	}
-	return {mensagem: "", produto: [], categorias: []}
+	throw {mensagem: "Nao foi possivel recuperar os dados", produto: [], categorias: []}
         
-}) satisfies PageServerLoad ;
+}) satisfies PageServerLoad;
