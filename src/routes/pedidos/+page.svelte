@@ -51,7 +51,7 @@
 {#if $pedidosQuery.isLoading}
   <div>Carregando...</div>
 {:else}
-  <div class="flex px-8 py-8 gap-8 flex-wrap">
+  <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
     {#each $pedidosQuery.data.pedidos as pedido}
       <div class="card p-4 grid grid-cols-3 gap-4 self-start ">
         <p class="text-xl text-neutral-300">Pedido N#{pedido.id}</p>
