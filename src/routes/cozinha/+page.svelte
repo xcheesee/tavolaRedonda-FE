@@ -7,6 +7,7 @@
   
   export let data;
   const queryClient = useQueryClient()
+
   let byStatus: PedidoStatus = {
     finalizado: [],
     em_andamento: [],
@@ -16,16 +17,17 @@
     message: "Pedido atualizado com sucesso!",
     background: "variant-ghost-success",
   }
-
   const failEditStatusToast: ToastSettings = {
     message: "Nao foi possivel atualizar o Pedido :(",
     background: "bg-red-500",
   }
+
   const pedidosQuery = createQuery({
     queryFn: async () => await( await fetch("http://127.0.0.1:8000/api/pedidos")).json(),
     queryKey: ["pedidos"],
     initialData: data.pedidos,
   })
+
   const editStatusMutation = createMutation(editStatus, {
     onMutate: async ({ pedido, status}) => {
       await queryClient.cancelQueries(["pedidos"])
@@ -79,7 +81,7 @@
    <div class="text-green-500 text-5xl">Finalizados</div>
    <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
      {#each byStatus.finalizado as pedido}
-     <CozinhaPedidoCard pedido={pedido} atualizarPedido={ () => $editStatusMutation.mutate({pedido, status: "em_andamento"}) }/>
+     <CozinhaPedidoCard pedido={pedido} atualizarPedido={ () => {} } />
      {/each}
    </div>
   </div>
