@@ -8,6 +8,7 @@
   export let data;
 
   const queryClient = useQueryClient();
+
   const delToast: ToastSettings = {
     message: "Pedido excluido com sucesso!",
     background: "variant-ghost-success",
