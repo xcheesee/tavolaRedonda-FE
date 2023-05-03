@@ -1,16 +1,19 @@
 <script lang="ts">
-    import Icon from "@iconify/svelte";
+  import Icon from "@iconify/svelte";
 	import type { Pedido } from "../utils/types";
 
-    export let pedido: Pedido;
+  export let pedido: Pedido;
+  export let atualizarPedido: () => void
 </script>
 
 <div class="card p-4 grid grid-cols-3 gap-4 self-start ">
   <p class="text-xl text-neutral-300">Pedido N#{pedido.id}</p>
-  {#if +pedido.Status === 0}
-    <div class="text-red-500 col-start-3 font-bold text-xl">Em andamento</div>
-    {:else if +pedido.Status === 1}
-    <div class="text-green-500 col-start-3 font-bold">Finalizado</div>
+  {#if pedido.status_pedido === "recebido"}
+  <div class="text-red-500 col-start-3 font-bold text-xl">Recebido</div>
+  {:else if pedido.status_pedido === "em_andamento"}
+  <div class="text-yellow-500 col-start-3 font-bold">Em Andamento</div>
+  {:else}
+  <div class="text-green-500 col-start-3 font-bold">Finalizado</div>
   {/if}
   <p>Itens:</p>
   <div class="grid col-span-3 divide-y divide-inherit rounded border border-primary-900 bg-primary-700">
@@ -23,12 +26,13 @@
     {/each}
   </div>
   <div class="text-center col-span-2 flex items-center justify-center"><p>Pagamento: {pedido.forma_pagamento}</p></div>
-  {#if +pedido.Status !== 1}
+  {#if pedido.status_pedido !== "finalizado"}
     <div class="flex items-center justify-end">
-      <button class="icon-btn  bg-red-600 flex rounded-lg justify-center items-center px-2 py-1 gap-2" on:click={() => {
+      <button class="icon-btn  bg-green-600 flex rounded-lg justify-center items-center px-2 py-2 gap-2" on:click={() => {
+          atualizarPedido()
         }}>
-        Cancelar pedido 
-        <Icon icon="material-symbols:cancel-outline" heigth="36" width="36" />
+         Atualizar
+        <Icon icon="radix-icons:update" heigth="24" width="24" />
       </button>
     </div>
   {/if}

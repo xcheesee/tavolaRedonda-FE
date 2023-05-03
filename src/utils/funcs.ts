@@ -1,4 +1,4 @@
-import type { CarrinhoItem, ProdutoItem } from "./types"
+import type { CarrinhoItem, Pedido, ProdutoItem } from "./types"
 
 export async function addProduto ({nome, valor, descricao, categoria}: ProdutoItem) {
   const res = await fetch(`http://localhost:8000/api/produtos`, {
@@ -60,6 +60,7 @@ export async function finalizarPedido(carrinho: {[key:string]: CarrinhoItem}) {
     body: JSON.stringify({
       cliente_id: 1,
       Status: 0,
+      status_pedido: "recebido",
       forma_pagamento: "Dinheiro",
       itens: Object.values(carrinho).map(val => ({
         produto_id: val.id, 
@@ -83,6 +84,16 @@ export async function delPedido(pedido_id: string) {
   }
   throw {status: res.status, message: "Nao foi possivel enviar o pedido :("}
 
+}
+
+export async function editStatus({pedido, status}: {pedido: Pedido, status: 'recebido' | 'finalizado' | "em_andamento"}) {
+  const res = await fetch(`http://127.0.0.1:8000/api/pedidos/${pedido.id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({cliente_id: pedido.cliente_id, forma_pagamento: pedido.forma_pagamento, status_pedido: status})
+  })
 }
 export function multiplyNum(num: string, multiplier: number): string {
   const parsedFloat = +num.replace(",", ".")

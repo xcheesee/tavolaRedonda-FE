@@ -8,10 +8,10 @@
 
 <div class="card p-4 grid grid-cols-3 gap-4 self-start ">
   <p class="text-xl text-neutral-300">Pedido N#{pedido.id}</p>
-  {#if +pedido.Status === 0}
-    <p class="text-red-500 col-start-3">Em andamento</p>
-    {:else if +pedido.Status === 1}
-    <p class="text-green-500 col-start-3">Finalizado</p>
+  {#if pedido.status_pedido === "recebido"}
+    <p class="text-red-500 col-start-3">Recebido</p>
+    {:else if pedido.status_pedido === "em_andamento"}
+    <p class="text-green-500 col-start-3">Em Andamento</p>
   {/if}
   <p>Itens:</p>
   <div class="grid col-span-3 divide-y divide-inherit rounded border border-primary-900 bg-primary-700">
@@ -24,7 +24,7 @@
     {/each}
   </div>
   <div class="text-center col-span-2 flex items-center justify-center"><p>Pagamento: {pedido.forma_pagamento}</p></div>
-  {#if +pedido.Status !== 1}
+  {#if pedido.status_pedido !== "finalizado"}
     <div class="flex items-center justify-end">
       <button class="icon-btn  bg-red-600 flex rounded-lg justify-center items-center px-2 py-1 gap-2" on:click={() => {
          delPedido()

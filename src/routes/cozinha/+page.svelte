@@ -1,21 +1,61 @@
 <script lang="ts">
-    import CozinhaPedidoCard from '../../components/cozinhaPedidoCard.svelte';
-    export let data;
+  import type { Pedido, PedidoStatus, PedidoQuery } from '../../utils/types';
+  import CozinhaPedidoCard from '../../components/cozinhaPedidoCard.svelte';
+  import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
+  import { editStatus } from '../../utils/funcs';
+  
+  export let data;
+  const queryClient = useQueryClient()
+  let byStatus: PedidoStatus = {
+    finalizado: [],
+    em_andamento: [],
+    recebido: []
+  }
+  const pedidosQuery = createQuery({
+    queryFn: async () => await( await fetch("http://127.0.0.1:8000/api/pedidos")).json(),
+    queryKey: ["pedidos"],
+    initialData: data.pedidos,
+  })
+  const editStatusMutation = createMutation(editStatus, {
+    onMutate: async ({ pedido, status}) => {
+      await queryClient.cancelQueries(["pedidos"])
+      const prevPeds: PedidoQuery | undefined = queryClient.getQueryData(['pedidos'])
+      
+      if (prevPeds) {
+        queryClient.setQueryData(['pedidos'], {
+          mensagem: prevPeds.mensagem,
+          pedidos: [...prevPeds.pedidos.map(ele => {
+            if(+ele.id === +pedido.id) {
+              byStatus[ele.status_pedido] = byStatus[ele.status_pedido].filter( statusEle => +statusEle.id !== +ele.id)
+              byStatus[status] = [...byStatus[status], {...ele, status_pedido: status}]
+              return {...ele, status_pedido: status}
+            }
+            return ele
+          })]
+        })
+      }
+      return {...prevPeds}
+      
+    },
+    onSuccess: () => alert("secesso")
+  })
+
+  $pedidosQuery.data.forEach( (pedido: Pedido) => byStatus[pedido.status_pedido].push(pedido))
 </script>
 <div class="flex flex-col pl-4 pt-4">
-    <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
-      {#each data.pedidos as pedido}
-        <CozinhaPedidoCard pedido={pedido} />
+  <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
+    {#each byStatus.recebido as pedido}
+    <CozinhaPedidoCard pedido={pedido} atualizarPedido={ () => $editStatusMutation.mutate({pedido, status: "em_andamento"}) }/>
       {/each}
     </div>
     <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
-      {#each data.pedidos as pedido}
-        <CozinhaPedidoCard pedido={pedido} />
-      {/each}
-    </div>
-    <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
-      {#each data.pedidos as pedido}
-        <CozinhaPedidoCard pedido={pedido} />
-      {/each}
-    </div>
-</div>
+      {#each byStatus.em_andamento as pedido}
+      <CozinhaPedidoCard pedido={pedido} atualizarPedido={ () => $editStatusMutation.mutate({pedido, status: "finalizado"}) }/>
+        {/each}
+      </div>
+      <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
+        {#each byStatus.finalizado as pedido}
+        <CozinhaPedidoCard pedido={pedido} atualizarPedido={ () => $editStatusMutation.mutate({pedido, status: "em_andamento"}) }/>
+          {/each}
+        </div>
+      </div>
