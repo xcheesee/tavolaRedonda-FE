@@ -36,6 +36,7 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"@tanstack/svelte-query": "^4.27.0"
+		"@tanstack/svelte-query": "^4.27.0",
+		"socket.io-client": "^4.6.1"
 	}
 }

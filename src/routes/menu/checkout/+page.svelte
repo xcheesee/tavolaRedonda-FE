@@ -6,6 +6,9 @@
 	import { goto } from "$app/navigation";
 	import { error } from "@sveltejs/kit";
 	import { finalizarPedido } from "../../../utils/funcs";
+	import { io } from  "socket.io-client"
+
+	const socket = io("http://127.0.0.1:3000");
 
 	function getTotal(val: string, multiplier: number): number {
 		const formattedVal = +val.replace(",", ".")
@@ -48,6 +51,7 @@
 						if(!res.ok) {
 							return toastStore.trigger(errorToast)
 						}
+						socket.emit("pedidoRealizado", res.data)
 						$carrinhoStore = {}
 						toastStore.trigger(confToast)
 

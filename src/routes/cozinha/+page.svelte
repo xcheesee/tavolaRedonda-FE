@@ -4,9 +4,12 @@
   import CozinhaPedidoCard from '../../components/cozinhaPedidoCard.svelte';
   import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { editStatus } from '../../utils/funcs';
+  import { io } from "socket.io-client"
+
+	const socket = io("http://127.0.0.1:3000");
   
   export let data;
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
 
   let byStatus: PedidoStatus = {
     finalizado: [],

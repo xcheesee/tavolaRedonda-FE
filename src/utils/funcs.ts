@@ -70,7 +70,8 @@ export async function finalizarPedido(carrinho: {[key:string]: CarrinhoItem}) {
   })
 
   if(res.ok) {
-    return {ok: true, res: res.status}
+    const json = await res.json()
+    return {ok: true, res: res.status, data: json}
   }
   throw {message: "Nao foi possivel finalizar a compra :(", status: res.status}
 }
