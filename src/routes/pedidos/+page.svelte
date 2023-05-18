@@ -4,8 +4,11 @@
   import type { PedidoQuery } from "../../utils/types.js";
   import { toastStore, type ToastSettings } from "@skeletonlabs/skeleton";
 	import ClientePedidoCard from "../../components/clientePedidoCard.svelte";
+  import { io } from "socket.io-client"
 
   export let data;
+
+  const socket = io("http://127.0.0.1:3000")
 
   const queryClient = useQueryClient();
 
@@ -54,7 +57,11 @@
 {:else}
   <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
     {#each $pedidosQuery.data.pedidos as pedido}
-      <ClientePedidoCard pedido={pedido} delPedido={ () => $delPedidoMutation.mutate(pedido.id) }/>
+      <ClientePedidoCard pedido={pedido} delPedido={ async () => {
+        $delPedidoMutation.mutate(pedido.id)
+        socket.emit("pedidoCancelado", pedido)
+
+      } }/>
     {/each}
   </div>
 {/if}

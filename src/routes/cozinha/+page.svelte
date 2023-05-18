@@ -7,7 +7,7 @@
   import { io } from "socket.io-client"
 
 	const socket = io("http://127.0.0.1:3000");
-  
+
   export let data;
   const queryClient = useQueryClient();
 
@@ -20,6 +20,7 @@
     message: "Pedido atualizado com sucesso!",
     background: "variant-ghost-success",
   }
+
   const failEditStatusToast: ToastSettings = {
     message: "Nao foi possivel atualizar o Pedido :(",
     background: "bg-red-500",
@@ -62,6 +63,17 @@
   })
 
   $pedidosQuery.data.forEach( (pedido: Pedido) => byStatus[pedido.status_pedido].push(pedido))
+
+  socket.on("cozinhaPedido", async (pedido) => {
+    await queryClient.cancelQueries(["pedidos"])
+    await $pedidosQuery.refetch()
+    byStatus["recebido"] = [...byStatus.recebido, pedido.pedido]
+  })
+
+  socket.on("cozinhaCancelado", async (pedidoId, status: "recebido" | "em_andamento" | "finalizado") => {
+    await queryClient.cancelQueries(["pedidos"])
+    byStatus[status] = byStatus[status].filter(ele => ele.id !== pedidoId)
+  })
 </script>
 <div class="flex flex-col px-4 pt-4 divide-y-2 divide-primary-500">
   <div>
