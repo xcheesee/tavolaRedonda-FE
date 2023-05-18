@@ -29,7 +29,18 @@
   const pedidosQuery = createQuery({
     queryFn: async () => await( await fetch("http://127.0.0.1:8000/api/pedidos")).json(),
     queryKey: ["pedidos"],
-    initialData: data.pedidos,
+    initialData: data,
+    //enabled: false,
+    onSuccess: (res) => {
+      console.log(res)
+      byStatus = {
+        finalizado: [],
+        em_andamento: [],
+        recebido: []
+      }
+      res.pedidos.forEach( (pedido: Pedido) => byStatus[pedido.status_pedido].push(pedido))
+      byStatus = {...byStatus }
+    }
   })
 
   const editStatusMutation = createMutation(editStatus, {
@@ -62,17 +73,14 @@
     },
   })
 
-  $pedidosQuery.data.forEach( (pedido: Pedido) => byStatus[pedido.status_pedido].push(pedido))
-
-  socket.on("cozinhaPedido", async (pedido) => {
-    await queryClient.cancelQueries(["pedidos"])
-    await $pedidosQuery.refetch()
-    byStatus["recebido"] = [...byStatus.recebido, pedido.pedido]
+  socket.on("cozinhaPedido", () => {
+    queryClient.cancelQueries(["pedidos"])
+    $pedidosQuery.refetch()
   })
 
-  socket.on("cozinhaCancelado", async (pedidoId, status: "recebido" | "em_andamento" | "finalizado") => {
-    await queryClient.cancelQueries(["pedidos"])
-    byStatus[status] = byStatus[status].filter(ele => ele.id !== pedidoId)
+  socket.on("cozinhaCancelado", () => {
+    queryClient.cancelQueries(["pedidos"])
+    $pedidosQuery.refetch()
   })
 </script>
 <div class="flex flex-col px-4 pt-4 divide-y-2 divide-primary-500">

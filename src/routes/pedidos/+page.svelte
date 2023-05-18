@@ -48,7 +48,10 @@
         queryClient.setQueryData(['pedidos'], context.prevPeds)
       }
     },
-    onSuccess: () => toastStore.trigger(delToast)
+    onSuccess: () => {
+      toastStore.trigger(delToast)
+      socket.emit("pedidoCancelado")
+    }
   })
 
 </script>
@@ -59,8 +62,6 @@
     {#each $pedidosQuery.data.pedidos as pedido}
       <ClientePedidoCard pedido={pedido} delPedido={ async () => {
         $delPedidoMutation.mutate(pedido.id)
-        socket.emit("pedidoCancelado", pedido)
-
       } }/>
     {/each}
   </div>
