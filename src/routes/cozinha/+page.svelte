@@ -32,7 +32,6 @@
     initialData: data,
     //enabled: false,
     onSuccess: (res) => {
-      console.log(res)
       byStatus = {
         finalizado: [],
         em_andamento: [],
@@ -64,7 +63,10 @@
       return {...prevPeds}
       
     },
-    onSuccess: () => toastStore.trigger(editStatusToast),
+    onSuccess: () => {
+      toastStore.trigger(editStatusToast)
+      socket.emit("cozinhaStatus")
+    },
     onError: (context: any) => {
       toastStore.trigger(failEditStatusToast)
       if (context?.prevPeds) {
@@ -88,7 +90,9 @@
     <div class="text-red-500 text-5xl">Recebidos</div>
     <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
       {#each byStatus.recebido as pedido}
-      <CozinhaPedidoCard pedido={pedido} atualizarPedido={ () => $editStatusMutation.mutate({pedido, status: "em_andamento"}) }/>
+      <CozinhaPedidoCard pedido={pedido} atualizarPedido={ () => {
+        $editStatusMutation.mutate({pedido, status: "em_andamento"})
+      }}/>
       {/each}
     </div>
   </div>
