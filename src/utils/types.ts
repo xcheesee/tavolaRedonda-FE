@@ -1,6 +1,5 @@
 export interface Produto {
-    mensagem: string
-    produto: ProdutoItem[]
+    data: ProdutoItem[]
 }
 
 export interface ProdutoItem {
@@ -8,7 +7,8 @@ export interface ProdutoItem {
     nome: string;
     valor: string;
     descricao: string;
-    categoria: Categoria;
+    categoria: string;
+    categoria_id: string;
 }
 
 export interface PedidoProduto extends ProdutoItem {

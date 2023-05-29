@@ -4,7 +4,7 @@
   export let type = 'add';
 
   function onFormSubmit() {
-    if($modalStore[0].response) $modalStore[0].response({...formData,categoria: current,  send: true})
+    if($modalStore[0].response) $modalStore[0].response( {...formData,categoria: current,  send: true} )
     modalStore.close()
   }
 

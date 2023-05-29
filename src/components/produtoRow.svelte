@@ -32,8 +32,8 @@
 
       if (prevProds) {
         queryClient.setQueryData(['produtos'], {
-          mensagem: prevProds.mensagem,
-          produto: prevProds.produto.filter(ele => ele.id !== id)
+          ...prevProds,
+          data: prevProds.data.filter(ele => ele.id !== id)
         })
       }
       return [prevProds]
@@ -48,8 +48,8 @@
 
       if (prevProds) {
         queryClient.setQueryData(['produtos'], {
-          mensagem: prevProds.mensagem,
-          produto: prevProds.produto.map(ele => {
+          ...prevProds,
+          data: prevProds.data.map(ele => {
             if(ele.id !== produto.id) return ele
             return {...produto}
           })
@@ -66,7 +66,7 @@
 <td>{produto.nome}</td>
 <td>{produto.descricao}</td>
 <td>R$ {produto.valor}</td>
-<td>{produto.categoria.nome}</td>
+<td>{produto.categoria}</td>
 <td>
   <button 
     type="button"

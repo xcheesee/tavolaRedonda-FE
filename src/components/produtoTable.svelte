@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Categoria, Produto } from "../utils/types";
+  import type { Produto } from "../utils/types";
   import ProdutoRow from "./produtoRow.svelte";
   export let produtos: Produto;
 </script>
@@ -16,7 +16,7 @@
       </tr>
     </thead>
     <tbody class="bg-primary-700">
-      {#each produtos.produto as produto}
+      {#each produtos.data as produto}
         <tr>
           <ProdutoRow produto={produto} />
         </tr>
