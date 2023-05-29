@@ -9,7 +9,7 @@
 	const produtoQuery = createQuery({
 		queryKey: ['produtos'],
 		queryFn: async () => await (await fetch("https://localhost:8000/api/produtos")).json(),
-		initialData: data,
+		initialData: data.produto,
 	})
 
 	let produtoData = $produtoQuery.data
@@ -29,13 +29,13 @@
 		{#each data.categorias as categoria}
 		<button 
 			class="btn"
-			on:click={() => produtoData = {mensagem: "", produto: [...getProdutoByCat($produtoQuery.data.produto, categoria.id)]}}>{categoria.nome}</button>
+			on:click={() => produtoData = { data: [...getProdutoByCat($produtoQuery.data.produto, categoria.id)]}}>{categoria.nome}</button>
 			
 		{/each}
 	</div>
 	<div class="flex justify-center">
 		<div class="flex flex-col gap-4 pt-8 lg:w-[1024px]">
-			{#each produtoData.produto as produto}
+			{#each produtoData.data as produto}
 				<MenuItemCard produto={produto}/>
 			{/each}
 		</div>

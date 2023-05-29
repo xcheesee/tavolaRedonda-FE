@@ -4,8 +4,9 @@ export const load = (async ({ fetch, depends }) => {
 	depends('prods:get')
 	if(prodRes.ok && catRes.ok) {
 		const [prodJson, catJson] = await Promise.all([prodRes.json(), catRes.json()])
-		return {mensagem: prodJson.mensagem, produto: prodJson.produto, categorias: catJson.categorias}
+		console.log(prodJson)
+		return {produto: prodJson, categorias: catJson.categorias}
 	}
-	throw {mensagem: "Nao foi possivel recuperar os dados", produto: [], categorias: []}
+	throw {produto: [], categorias: []}
         
 }) satisfies PageServerLoad;
