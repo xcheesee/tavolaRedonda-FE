@@ -41,9 +41,9 @@ export interface Categoria {
 export interface Pedido {
     id: string;
     //cliente_id: string;
-    status_pedido?: "recebido" | "em_andamento" | "finalizado";
-    forma_pagamento?: string;
-    cliente?: Cliente;
+    status_pedido: "recebido" | "em_andamento" | "finalizado";
+    forma_pagamento: string;
+    cliente: Cliente;
     produto?: PedidoProduto;
     categoria?: Categoria;
     pedido_itens?: queryPedidoItens[];

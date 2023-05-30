@@ -6,8 +6,8 @@
 
     let filters = {
         clientes: "",
-        valor_maior_que: "",
-        valor_menor_que: "",
+        valor_maior_que: 0,
+        valor_menor_que: 0,
         status_pedido: ""
     }
     let routeFilter = ""
@@ -64,8 +64,8 @@
             on:click={() => {
                 filters = {
                     clientes: "",
-                    valor_maior_que: "",
-                    valor_menor_que: "",
+                    valor_maior_que: 0,
+                    valor_menor_que: 0,
                     status_pedido: ""
                 }
                 setRouteFilter("")

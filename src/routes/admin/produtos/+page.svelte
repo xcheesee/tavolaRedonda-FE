@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { PageServerData } from './$types';
+  import type { PageData } from './$types';
   import { Accordion, AccordionItem, modalStore, type ModalSettings } from '@skeletonlabs/skeleton';
   import ProdutoTable from '../../../components/produtoTable.svelte'
   import { Paginator } from '@skeletonlabs/skeleton';
@@ -10,8 +10,8 @@
 
   const queryClient = useQueryClient()
 
-  export let data: PageServerData
-  $categoriasStore = data.categorias
+  export let data: PageData
+  $categoriasStore = data?.categorias
 
   let filters = {
     categorias: "",
