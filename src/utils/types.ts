@@ -8,7 +8,7 @@ export interface ProdutoItem {
     valor: string;
     descricao: string;
     categoria: string;
-    categoria_id: string;
+    categoria_id?: string;
 }
 
 export interface PedidoProduto extends ProdutoItem {
