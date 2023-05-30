@@ -1,5 +1,6 @@
 <script lang="ts">
 	import SidebarList from "../../components/sidebarList.svelte";
+    import { goto } from "$app/navigation";
 
     import { AppShell } from "@skeletonlabs/skeleton";
 </script>
@@ -8,9 +9,17 @@
 	<!-- Insert the list: -->
 	        <nav class="list">
 		        <ul>
-                    <SidebarList name="Vendas"/>
                     <SidebarList name="Usuarios"/>
-                    <SidebarList name="Produtos"/>
+                    <div class="h-full flex">
+                        <button on:click={() => goto("/admin/vendas")} class="w-full">
+                            <SidebarList name="Vendas" />
+                        </button>
+                    </div>
+                    <div class="h-full flex">
+                        <button on:click={() => goto("/admin/produtos")} class="w-full">
+                            <SidebarList name="Produtos" />
+                        </button>
+                    </div>
 		        </ul>
 	        </nav>
 	        <!-- --- -->
