@@ -3,8 +3,8 @@
 	import { Accordion, AccordionItem } from "@skeletonlabs/skeleton";
 	import { createQuery } from "@tanstack/svelte-query";
 	import PedidoTable from "../../../components/pedidoTable.svelte";
-    import { Line } from 'svelte-chartjs'
-    import 'chart.js/auto'; 
+    //import { Line } from 'svelte-chartjs'
+    //import 'chart.js/auto'; 
     
     let data = {
     labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -93,8 +93,8 @@
             on:click={() => {
                 filters = {
                     clientes: "",
-                    valor_maior_que: "",
-                    valor_menor_que: "",
+                    valor_maior_que: 0,
+                    valor_menor_que: 0,
                     status_pedido: ""
                 }
                 setRouteFilter("")
@@ -118,20 +118,10 @@
     </AccordionItem>
   </Accordion>
   <Accordion class="card">
-    <AccordionItem open>
+    <AccordionItem >
       <svelte:fragment slot="summary">Graficos</svelte:fragment>
       <svelte:fragment slot="content">
-        <div class="grid lg:grid-cols-3 grid-cols-1">
-          <div>
-            <Line data={data} height={100} options={{maintainAspectRatio: false}}/>
-          </div>
-          <div>
-            <Line data={data} height={100} options={{maintainAspectRatio: false}}/>
-          </div>
-          <div>
-            <Line data={data} height={100} options={{maintainAspectRatio: false}}/>
-          </div>
-        </div>
+        <!-- <Line data={data} /> -->
       </svelte:fragment>
     </AccordionItem>
   </Accordion>

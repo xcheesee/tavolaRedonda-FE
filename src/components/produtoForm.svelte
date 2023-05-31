@@ -4,7 +4,7 @@
   export let type = 'add';
 
   function onFormSubmit() {
-    if($modalStore[0].response) $modalStore[0].response( {...formData,categoria: current,  send: true} )
+    if($modalStore[0].response) $modalStore[0].response( {...formData,categoria_id: selectedCat,  send: true} )
     modalStore.close()
   }
 
@@ -16,8 +16,8 @@
     ...$produtoStore,
   }
 
-  let selectedCat = 0;
-  $: current = $categoriasStore.find(entry => +entry.id === selectedCat)
+  let selectedCat = $produtoStore.categoria_id ?? 0;
+  //$: current = $categoriasStore.find(entry => +entry.id === selectedCat)
 
 </script>
 <div class="bg-surface-900 px-8 py-4 rounded flex flex-col gap-4">
@@ -44,7 +44,7 @@
   </label>
   <label>
     <span>Categoria</span>
-    <select  class="select" bind:value={selectedCat}>
+    <select  class="select" bind:value={selectedCat} >
       {#each $categoriasStore as value}
       <option value={value.id}>{value.nome}</option>
       {/each}

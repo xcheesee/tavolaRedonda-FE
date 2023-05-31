@@ -6,7 +6,7 @@
   import { editStatus } from '../../utils/funcs';
   import { io } from "socket.io-client"
 
-	const socket = io("http://127.0.0.1:3000");
+  const socket = io("http://127.0.0.1:3000");
 
   export let data;
   const queryClient = useQueryClient();
@@ -37,7 +37,7 @@
         em_andamento: [],
         recebido: []
       }
-      res.pedidos.forEach( (pedido: Pedido) => byStatus[pedido.status_pedido].push(pedido))
+      res.data.forEach( (pedido: Pedido) => byStatus[pedido.status_pedido].push(pedido))
       byStatus = {...byStatus }
     }
   })
@@ -49,8 +49,7 @@
       
       if (prevPeds) {
         queryClient.setQueryData(['pedidos'], {
-          mensagem: prevPeds.mensagem,
-          pedidos: [...prevPeds.pedidos.map(ele => {
+          data: [...prevPeds.pedidos.map(ele => {
             if(+ele.id === +pedido.id) {
               byStatus[ele.status_pedido] = byStatus[ele.status_pedido].filter( statusEle => +statusEle.id !== +ele.id)
               byStatus[status] = [...byStatus[status], {...ele, status_pedido: status}]

@@ -29,7 +29,7 @@
 		{#each data.categorias as categoria}
 		<button 
 			class="btn"
-			on:click={() => produtoData = { data: [...getProdutoByCat($produtoQuery.data.produto, categoria.id)]}}>{categoria.nome}</button>
+			on:click={() => produtoData = { data: [...getProdutoByCat($produtoQuery.data.data, categoria.id)]}}>{categoria.nome}</button>
 			
 		{/each}
 	</div>

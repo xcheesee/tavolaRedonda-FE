@@ -85,7 +85,7 @@
 
 <div class="flex flex-col gap-4 px-8">
   <Accordion class="card">
-    <AccordionItem>
+    <AccordionItem open>
       <svelte:fragment slot="summary">Filtros</svelte:fragment>
       <div slot="content" class="grid grid-cols-2 gap-4">
         <label class="label">
@@ -129,13 +129,14 @@
       </div>
     </AccordionItem>
   </Accordion>
-  <Accordion class="card">
+  <!--<Accordion class="card">
     <AccordionItem >
       <svelte:fragment slot="summary">Graficos</svelte:fragment>
       <svelte:fragment slot="content">
       </svelte:fragment>
     </AccordionItem>
   </Accordion>
+  -->
   <Accordion class="card ">
     <AccordionItem open>
       <svelte:fragment slot="summary">Produtos</svelte:fragment>
