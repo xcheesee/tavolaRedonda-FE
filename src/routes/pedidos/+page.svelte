@@ -6,7 +6,7 @@
 	import ClientePedidoCard from "../../components/clientePedidoCard.svelte";
   import { io } from "socket.io-client"
 
-  export let data;
+  //export let data;
 
   const socket = io("http://127.0.0.1:3000")
 
@@ -31,14 +31,14 @@
   const pedidosQuery = createQuery({
     queryKey: ['pedidos'],
     queryFn: async () => await(await fetch("http://127.0.0.1:8000/api/pedidos")).json(),
-    initialData: data,
+    //initialData: data.data,
     onSuccess: (res) => {
       byStatus = {
         finalizado: [],
         em_andamento: [],
         recebido: []
       }
-      res.pedidos.forEach( (pedido: Pedido) => byStatus[pedido.status_pedido].push(pedido))
+      res.data.forEach( (pedido: Pedido) => byStatus[pedido.status_pedido].push(pedido))
       byStatus = {...byStatus }
     }
   })
@@ -50,8 +50,7 @@
 
       if (prevPeds) {
         queryClient.setQueryData(['pedidos'], {
-          mensagem: prevPeds.mensagem,
-          pedidos: [...prevPeds.pedidos.filter(ele => +ele.id !== +id)]
+          data: [...prevPeds.data.filter(ele => +ele.id !== +id)]
         })
       }
       return {...prevPeds}

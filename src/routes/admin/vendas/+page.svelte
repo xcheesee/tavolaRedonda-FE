@@ -5,6 +5,7 @@
 	import PedidoTable from "../../../components/pedidoTable.svelte";
     import { Line } from 'svelte-chartjs'
     import 'chart.js/auto'; 
+	import FiltroInput from "../../../components/filtroInput.svelte";
     
     let data = {
     labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
@@ -59,10 +60,7 @@
     <AccordionItem open>
       <svelte:fragment slot="summary">Filtros</svelte:fragment>
       <div slot="content" class="grid grid-cols-2 gap-4">
-        <label class="label">
-          <span>Cliente</span>
-          <input class="input" type="text" bind:value={filters.clientes}/>
-        </label>
+        <FiltroInput label="Cliente" value={filters.clientes} />
         <label class="label">
           <span>Status</span>
           <select class="select" bind:value={filters.status_pedido}>

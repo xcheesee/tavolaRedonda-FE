@@ -1,6 +1,6 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
-	import type { Pedido } from "../utils/types";
+	  import type { Pedido } from "../utils/types";
 
     export let pedido: Pedido;
     export let delPedido: () => void
@@ -17,11 +17,11 @@
   {/if}
   <p>Itens:</p>
   <div class="grid col-span-3 divide-y divide-inherit rounded border border-primary-900 bg-primary-700">
-    {#each pedido.pedido_itens as item}
+    {#each pedido.itens as item}
     <div class="grid grid-cols-[1fr_max-content] px-6 py-4">
-      <div class="text-neutral-200">{item.produto.nome}</div>
-      <div class="text-primary-400 col-start-1">{item.produto.descricao}</div>
-      <div class="ol-start-2 self-center justify-self-center">R$ {item.produto.valor} * {item.quantidade} un</div>
+      <div class="text-neutral-200">{item.nome}</div>
+      <div class="text-primary-400 col-start-1">{item.descricao}</div>
+      <div class="ol-start-2 self-center justify-self-center">R$ {item.unitario} * {item.quantidade} un</div>
     </div>
     {/each}
   </div>

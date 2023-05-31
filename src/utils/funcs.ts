@@ -93,7 +93,7 @@ export async function editStatus({pedido, status}: {pedido: Pedido, status: 'rec
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({cliente_id: pedido.cliente_id, forma_pagamento: pedido.forma_pagamento, status_pedido: status})
+    body: JSON.stringify({cliente_id: pedido.cliente.id, forma_pagamento: pedido.forma_pagamento, status_pedido: status})
   })
 }
 export function multiplyNum(num: string, multiplier: number): string {

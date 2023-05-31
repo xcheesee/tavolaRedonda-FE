@@ -46,19 +46,21 @@ export interface Pedido {
     cliente: Cliente;
     produto?: PedidoProduto;
     categoria?: Categoria;
-    pedido_itens?: queryPedidoItens[];
+    itens: queryPedidoItens[];
     total?: string;
 }
 
 export interface PedidoQuery {
-    mensagem: string;
-    pedidos: Pedido[];
+    data: Pedido[];
 }
 
 export interface queryPedidoItens {
     id: string;
-    pedido_id: string;
-    produto: ProdutoItem;
+    pedido_id?: string;
+    produto?: ProdutoItem;
+    nome: string;
+    descricao: string;
+    unitario: string;
     produto_id: string;
     quantidade: string;
     updated_at?: string;

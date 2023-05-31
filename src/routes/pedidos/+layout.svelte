@@ -1,10 +1,14 @@
+<script>
+	import SidebarList from "../../components/sidebarList.svelte";
+</script>
+
 <div class="grid grid-cols-[300px_1fr] h-full">
-	<div class="bg-surface-800">
-		<ul class="flex flex-col gap-8 [&>*]:text-xl [&>*]:p-4">
-			<a href="/menu/perfil" class="unstyled hover:bg-primary-500"><li class="">Perfil</li></a>
-			<a href="/menu" class="unstyled hover:bg-primary-500"><li class="">Menu</li></a>
-			<a href="/pedidos" class="unstyled hover:bg-primary-500"><li class="">Meus Pedidos</li></a>
+	<nav class="list">
+		<ul>
+        	<SidebarList name="Perfil" redirect="/"/>
+        	<SidebarList name="Menu" redirect="/menu"/>
+        	<SidebarList name="Meus Pedidos" redirect="/pedidos"/>
 		</ul>
-	</div>
+	</nav>
 	<slot/>
 </div>

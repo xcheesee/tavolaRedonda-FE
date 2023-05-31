@@ -49,7 +49,7 @@
       
       if (prevPeds) {
         queryClient.setQueryData(['pedidos'], {
-          data: [...prevPeds.pedidos.map(ele => {
+          data: [...prevPeds.data.map(ele => {
             if(+ele.id === +pedido.id) {
               byStatus[ele.status_pedido] = byStatus[ele.status_pedido].filter( statusEle => +statusEle.id !== +ele.id)
               byStatus[status] = [...byStatus[status], {...ele, status_pedido: status}]
