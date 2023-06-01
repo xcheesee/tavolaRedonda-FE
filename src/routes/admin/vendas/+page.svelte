@@ -3,16 +3,19 @@
 	import { Accordion, AccordionItem } from "@skeletonlabs/skeleton";
 	import { createQuery } from "@tanstack/svelte-query";
 	import PedidoTable from "../../../components/pedidoTable.svelte";
-    import { Line } from 'svelte-chartjs'
-    import 'chart.js/auto'; 
+  import { Line, Doughnut, Bar, PolarArea } from 'svelte-chartjs'
+  import 'chart.js/auto'; 
 	import FiltroInput from "../../../components/filtroInput.svelte";
-    
-    let data = {
-    labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+	import type { PageServerData } from "./$types";
+
+  export let data: PageServerData; 
+
+  let pagamentoGraphs = {
+    labels: Object.keys(data?.totalPagamentos),
     datasets: [
       {
-        label: "% of Votes",
-        data: [12, 19, 3, 5, 2, 3],
+        label: "Formas De Pagamento",
+        data: Object.values(data?.totalPagamentos) as number[],
         backgroundColor: [
           "rgba(255, 134,159,0.4)",
           "rgba(98,  182, 239,0.4)",
@@ -21,7 +24,7 @@
           "rgba(170, 128, 252,0.4)",
           "rgba(255, 177, 101,0.4)"
         ],
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: [
           "rgba(255, 134, 159, 1)",
           "rgba(98,  182, 239, 1)",
@@ -34,27 +37,80 @@
     ]
   }; 
 
-    let filters = {
-        clientes: "",
-        valor_maior_que: "",
-        valor_menor_que: "",
-        status_pedido: ""
-    }
-    let routeFilter = ""
+  let statusGraphs = {
+    labels: Object.keys(data?.totalStatus),
+    datasets: [
+      {
+        label: "Status",
+        data: Object.values(data?.totalStatus) as number[],
+        backgroundColor: [
+          "rgba(255, 134,159,0.4)",
+          "rgba(98,  182, 239,0.4)",
+          "rgba(255, 218, 128,0.4)",
+          "rgba(113, 205, 205,0.4)",
+          "rgba(170, 128, 252,0.4)",
+          "rgba(255, 177, 101,0.4)"
+        ],
+        borderWidth: 1,
+        borderColor: [
+          "rgba(255, 134, 159, 1)",
+          "rgba(98,  182, 239, 1)",
+          "rgba(255, 218, 128, 1)",
+          "rgba(113, 205, 205, 1)",
+          "rgba(170, 128, 252, 1)",
+          "rgba(255, 177, 101, 1)"
+        ]
+      }
+    ]
+  }; 
 
-    function setRouteFilter(filters: any) {
-      routeFilter = Object.entries(filters).reduce( (prev, curr) => {
-        return `${prev}filter[${curr[0]}]=${curr[1]}&`
-      }, "?")
-    }
+  let categoriaGraphs = {
+    labels: Object.keys(data?.totalCategorias),
+    datasets: [
+      {
+        label: "Status",
+        data: Object.values(data?.totalCategorias)as number[],
+        backgroundColor: [
+          "rgba(255, 134,159,0.4)",
+          "rgba(98,  182, 239,0.4)",
+          "rgba(255, 218, 128,0.4)",
+          "rgba(113, 205, 205,0.4)",
+          "rgba(170, 128, 252,0.4)",
+          "rgba(255, 177, 101,0.4)"
+        ],
+        borderWidth: 1,
+        borderColor: [
+          "rgba(255, 134, 159, 1)",
+          "rgba(98,  182, 239, 1)",
+          "rgba(255, 218, 128, 1)",
+          "rgba(113, 205, 205, 1)",
+          "rgba(170, 128, 252, 1)",
+          "rgba(255, 177, 101, 1)"
+        ]
+      }
+    ]
+  }; 
 
-    $: pedidosQuery = createQuery({
-        queryKey: ["pedidos", routeFilter],
-        queryFn: async () => await ( (await fetch(`http://127.0.0.1:8000/api/pedidos${routeFilter}`)).json() )
-    })
+  let filters = {
+      clientes: "",
+      valor_maior_que: "",
+      valor_menor_que: "",
+      status_pedido: ""
+  }
+  let routeFilter = ""
 
+  function setRouteFilter(filters: any) {
+    routeFilter = Object.entries(filters).reduce( (prev, curr) => {
+      return `${prev}filter[${curr[0]}]=${curr[1]}&`
+    }, "?")
+  }
 
+  $: pedidosQuery = createQuery({
+      queryKey: ["pedidos", routeFilter],
+      queryFn: async () => await ( (await fetch(`http://127.0.0.1:8000/api/pedidos${routeFilter}`)).json() )
+  })
 </script>
+
 <div class="flex flex-col gap-4 px-8">
   <Accordion class="card">
     <AccordionItem open>
@@ -121,13 +177,13 @@
       <svelte:fragment slot="content">
         <div class="grid lg:grid-cols-3 grid-cols-1">
           <div>
-            <Line data={data} height={100} options={{maintainAspectRatio: false}}/>
+            <Bar data={pagamentoGraphs} height={300} options={{maintainAspectRatio: false}}/>
           </div>
           <div>
-            <Line data={data} height={100} options={{maintainAspectRatio: false}}/>
+            <Doughnut data={statusGraphs} height={300} options={{maintainAspectRatio: false}}/>
           </div>
           <div>
-            <Line data={data} height={100} options={{maintainAspectRatio: false}}/>
+            <PolarArea data={categoriaGraphs} height={300} options={{maintainAspectRatio: false}}/>
           </div>
         </div>
       </svelte:fragment>
