@@ -13,6 +13,7 @@
   let pagamentoGraphs: any;
   let statusGraphs: any;
   let categoriaGraphs: any;
+  console.log($userStore)
 
   $: graphsQuery = createQuery({
     queryKey: ['graficos'],
@@ -120,7 +121,9 @@
 
   $: pedidosQuery = createQuery({
       queryKey: ["pedidos", routeFilter],
-      queryFn: async () => await getPedidos($userStore.token, routeFilter)
+      queryFn: async () => await getPedidos($userStore.token, routeFilter),
+      onSuccess: (res) => console.log(res)
+    
   })
 </script>
 
@@ -220,13 +223,13 @@
           <div>Carregando...</div>
           {:else}
           <div>
-            <Bar data={pagamentoGraphs} height={300} options={{maintainAspectRatio: false}}/>
+            <Bar data={pagamentoGraphs} height={300} options={{maintainAspectRatio: false, animation: false}}/>
           </div>
           <div>
-            <Doughnut data={statusGraphs} height={300} options={{maintainAspectRatio: false}}/>
+            <Doughnut data={statusGraphs} height={300} options={{maintainAspectRatio: false, animation: false}}/>
           </div>
           <div>
-            <PolarArea data={categoriaGraphs} height={300} options={{maintainAspectRatio: false}}/>
+            <PolarArea data={categoriaGraphs} height={300} options={{maintainAspectRatio: false, animation: false}}/>
           </div>
           {/if}
         </div>

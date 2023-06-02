@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
-  import { delPedido, getPedidos } from "../../utils/funcs.js";
+  import { delPedido,  getPedidosCliente } from "../../utils/funcs.js";
   import type { Pedido, PedidoQuery, PedidoStatus } from "../../utils/types.js";
   import { toastStore, type ToastSettings } from "@skeletonlabs/skeleton";
   import ClientePedidoCard from "../../components/clientePedidoCard.svelte";
@@ -30,8 +30,9 @@
 
   const pedidosQuery = createQuery({
     queryKey: ['pedidos'],
-    queryFn: async () => await getPedidos($userStore.token),
+    queryFn: async () => await getPedidosCliente($userStore.token),
     onSuccess: (res) => {
+      console.log(res)
       byStatus = {
         finalizado: [],
         em_andamento: [],
@@ -76,6 +77,8 @@
 </script>
 {#if $pedidosQuery.isLoading}
   <div>Carregando...</div>
+{:else if $pedidosQuery.data.data.length === 0}
+<div class="self-center justify-self-center text-3xl">Voce nao possui nenhum pedido!</div>
 {:else}
   <div class="flex flex-col xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
     <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">

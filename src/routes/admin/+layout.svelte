@@ -1,6 +1,10 @@
 <script lang="ts">
-	import SidebarList from "../../components/sidebarList.svelte";
+    import { onMount } from "svelte";
+    import SidebarList from "../../components/sidebarList.svelte";
     import { AppShell } from "@skeletonlabs/skeleton";
+    import { userStore } from "../../utils/stores";
+    import { goto } from "$app/navigation";
+
 </script>
 
 <AppShell slotSidebarLeft="bg-surface-500/5 w-56 ">

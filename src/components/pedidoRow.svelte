@@ -63,7 +63,7 @@
 </script>
 
 <td>{pedido.id}</td>
-<td>{pedido?.cliente?.nome}</td>
+<td>{pedido?.cliente}</td>
 <td>R$ {pedido.total}</td>
 <td>{pedido.forma_pagamento}</td>
 <td class="capitalize">{pedido.status_pedido}</td>

@@ -8,7 +8,7 @@
 
 	//export let data: PageData;
 
-	const produtoQuery = createQuery({
+	$: produtoQuery = createQuery({
 		queryKey: ['produtos'],
 		queryFn: async () => await getProdutos($userStore.token),
 	})

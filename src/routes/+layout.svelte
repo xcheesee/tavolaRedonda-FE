@@ -12,6 +12,8 @@
 	import { userStore } from '../utils/stores';
 	import { goto } from '$app/navigation';
 
+	export let data;
+
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -36,8 +38,8 @@
 		<div slot="header" class="flex justify-between px-4 py-2 items-center bg-surface-700">
 		<div class="text-3xl"> Tavola Redonda</div>
 			<div class="flex gap-8 items-center">
-				{#if $userStore.nome !== ""}
-				<div class="text-xl">Ola, {$userStore.nome}</div>
+				{#if data.user !== ""}
+				<div class="text-xl">Ola, {data.user}</div>
 				<button class="btn text-xl" on:click={async () => goto("/logout")}>Logout</button>
 				{:else}
 				<button class="btn text-xl" on:click={() => goto("/login")}>Login</button>

@@ -4,7 +4,7 @@
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import type { Produto, ProdutoItem, prodModal } from "../utils/types";
   import { delProduto, editProduto } from "../utils/funcs";
-  import { produtoStore } from "../utils/stores";
+  import { produtoStore, userStore } from "../utils/stores";
   export let produto: ProdutoItem
   
 
@@ -14,14 +14,14 @@
     type: 'confirm',
     title: `Deletar ${produto.nome}`,
     body: `Deseja remover ${produto.nome} dos registros?`,
-    response: async (r: boolean) => { if(r) $delProdMutation.mutate({id: produto.id}) }
+    response: async (r: boolean) => { if(r) $delProdMutation.mutate({id: produto.id, token: $userStore.token}) }
   }
 
   const edit: ModalSettings = {
     type: 'component',
     component: 'prodFormModal',
     response: async (r: prodModal) => {
-      if(r.send) $editProdMutation.mutate({...r, id: produto.id})
+      if(r.send) $editProdMutation.mutate({produto: {...r, id: produto.id},  token: $userStore.token})
     }
   }
 
@@ -42,7 +42,7 @@
   })
 
   const editProdMutation = createMutation(editProduto, {
-    onMutate: async (produto: ProdutoItem) => {
+    onMutate: async ({produto, token}: {produto: ProdutoItem, token: string}) => {
       await queryClient.cancelQueries(['produtos'])
       const prevProds: Produto | undefined = queryClient.getQueryData(['produtos'])
 

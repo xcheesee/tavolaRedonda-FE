@@ -28,8 +28,8 @@
 		background: "variant-ghost-error",
 		timeout: 5000,
 	}
-
 </script>
+
 <div class="flex justify-center">
 	<div class="flex flex-col gap-4 pt-8 lg:w-[1024px]">
 		{#if Object.keys($carrinhoStore).length === 0}

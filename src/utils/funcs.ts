@@ -20,22 +20,24 @@ export async function addProduto ({nome, valor, descricao, categoria_id}: Produt
   return res.status
 }
 
-export async function delProduto({id}: {id: string}) {
+export async function delProduto({id, token}: {id: string, token: string}) {
   const res = await fetch(`http://127.0.0.1:8000/api/produtos/${id}`, {
     method: 'DELETE',
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
     },
   })
 
   return res
 }
 
-export async function editProduto(produto: ProdutoItem) {
+export async function editProduto({produto, token}: {produto: ProdutoItem, token: string}) {
   const res = await fetch(`http://127.0.0.1:8000/api/produtos/${produto.id}`, {
-    method: 'PUT',
+    method: 'POST',
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
     },
     body: JSON.stringify({
       nome: produto.nome,
@@ -124,19 +126,18 @@ export async function criarConta (e: HTMLFormElement) {
   throw {message: json, status: res.status} 
 }
 
-export async function login (e: HTMLFormElement) {
-  const formData = new FormData(e)
+export async function login (e: FormData) {
+  //const formData = new FormData(e)
   const res = await fetch("http://127.0.0.1:8000/api/login", {
     method: "POST",
     headers: {
       "Accept": "application/json"
     },
-    body: formData
+    body: e
   })
   const json = await res.json();
   if(res.ok) {
-    localStorage.setItem('token', json.token);
-    return json;
+    return {...json, ok: true};
   }
   throw {message: json, status: res.status} 
 }
@@ -168,8 +169,20 @@ export async function getCategorias(token: string) {
 }
 
 export async function getPedidos(token: string, filters="") {
-  console.log(filters)
   const res = await fetch(`http://127.0.0.1:8000/api/pedidos${filters}`, {
+    headers: {
+      "Accept": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+  })
+  const json = await res.json()
+  if (res.ok) {
+    return json
+  }
+}
+
+export async function getPedidosCliente(token: string) {
+  const res = await fetch(`http://127.0.0.1:8000/api/pedidos/por_cliente`, {
     headers: {
       "Accept": "application/json",
       "Authorization": `Bearer ${token}`,
