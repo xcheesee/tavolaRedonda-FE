@@ -2,7 +2,7 @@
 	import type { ToastSettings } from "@skeletonlabs/skeleton";
 	import { toastStore } from "@skeletonlabs/skeleton";
 	import CheckoutItemCard from "../../../components/CheckoutItemCard.svelte";
-	import { carrinhoStore } from "../../../utils/stores";
+	import { carrinhoStore, userStore } from "../../../utils/stores";
 	import { goto } from "$app/navigation";
 	import { finalizarPedido } from "../../../utils/funcs";
 	import { io } from  "socket.io-client"
@@ -46,7 +46,7 @@
 				<div>
 					<button class="btn variant-ghost-warning" on:click={() => $carrinhoStore = {}}> Limpar Carrinho </button>
 					<button class="btn variant-ghost-success" on:click={async () => {
-						const res = await finalizarPedido($carrinhoStore)
+						const res = await finalizarPedido($userStore.token, $carrinhoStore)
 						if(!res.ok) {
 							return toastStore.trigger(errorToast)
 						}

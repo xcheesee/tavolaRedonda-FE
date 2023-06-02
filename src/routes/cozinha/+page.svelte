@@ -3,8 +3,9 @@
   import { toastStore, type ToastSettings } from '@skeletonlabs/skeleton';
   import CozinhaPedidoCard from '../../components/cozinhaPedidoCard.svelte';
   import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
-  import { editStatus } from '../../utils/funcs';
+  import { editStatus, getPedidos } from '../../utils/funcs';
   import { io } from "socket.io-client"
+  import { userStore } from '../../utils/stores';
 
   const socket = io("http://127.0.0.1:3000");
 
@@ -27,7 +28,7 @@
   }
 
   const pedidosQuery = createQuery({
-    queryFn: async () => await( await fetch("http://127.0.0.1:8000/api/pedidos")).json(),
+    queryFn: async () => await getPedidos($userStore.token),
     queryKey: ["pedidos"],
     initialData: data,
     //enabled: false,
@@ -44,6 +45,7 @@
 
   const editStatusMutation = createMutation(editStatus, {
     onMutate: async ({ pedido, status}) => {
+      console.log(pedido)
       await queryClient.cancelQueries(["pedidos"])
       const prevPeds: PedidoQuery | undefined = queryClient.getQueryData(['pedidos'])
       

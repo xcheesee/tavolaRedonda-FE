@@ -3,10 +3,15 @@
 	import { login } from "../../utils/funcs";
 	import { toastStore, type ToastSettings } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
-  import { userStore } from "../../utils/stores"; 
+	import { userStore } from "../../utils/stores"; 
 
 	let showPw = false;
 	let pw: string;
+
+	const loginToast: ToastSettings = {
+		message: "Login efetuado com sucesso!",
+		background: "variant-ghost-success"
+	}
 
 	const errorToast: ToastSettings = {
 		message: "Ocorreu um erro",
@@ -17,7 +22,8 @@
 		try{
 			const userData = await login(e)
 			$userStore = {...userData}
-			//goto('/menu')
+			toastStore.trigger(loginToast)
+			goto('/menu')
 		} catch(e) {
 			toastStore.trigger(errorToast)
 		}
@@ -28,8 +34,8 @@
 		<form 
 			class="grid gap-4 mx-4 my-8"
 			on:submit={e => {
-		    e.preventDefault();	
-			  LoginRequest(e.currentTarget)
+		    	e.preventDefault();	
+			  	LoginRequest(e.currentTarget)
 			}}
 			>
 			<div class="text-center font-bold text-3xl pb-4">FACA SEU LOGIN IMEDIATAMENTE</div>
@@ -39,19 +45,19 @@
 			</label>
 			{#if showPw}
 			<label class="label">
-			  <span>Password</span>
-			  <div class="input-group input-group-divider grid-cols-[1fr_auto]">
-			  	 <input type="text" bind:value={pw} name="password"/>
-			  	<button class="" on:click={() => showPw = !showPw}><Icon icon="fluent:eye-off-20-filled" width={36}/></button>
-			  </div>
+				<span>Password</span>
+				<div class="input-group input-group-divider grid-cols-[1fr_auto]">
+					<input type="text" bind:value={pw} name="password"/>
+					<button class="" on:click={() => showPw = !showPw}><Icon icon="fluent:eye-off-20-filled" width={36}/></button>
+				</div>
 			</label>
 			{:else}
 			<label class="label">
 				<span>Password</span>
-			  <div class="input-group input-group-divider grid-cols-[1fr_auto]">
-			  	<input type="password" bind:value={pw} name="password"/>
-			  	<button class="" on:click={() => showPw = !showPw}><Icon icon="fluent:eye-20-filled" width={36}/></button>
-			  </div>
+			  	<div class="input-group input-group-divider grid-cols-[1fr_auto]">
+			  		<input type="password" bind:value={pw} name="password"/>
+			  		<button class="" on:click={() => showPw = !showPw}><Icon icon="fluent:eye-20-filled" width={36}/></button>
+			  	</div>
 			</label>
 			{/if}
 			<div class="flex justify-end gap-4">

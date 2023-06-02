@@ -6,10 +6,12 @@
 	// Most of your app wide CSS should be put in this file
 	import '../app.postcss';
 	import { browser } from '$app/environment';
-	import { AppShell, Modal, type ModalComponent, Toast } from '@skeletonlabs/skeleton';
+	import { AppShell, Modal, type ModalComponent, Toast, type ToastSettings } from '@skeletonlabs/skeleton';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import ProdutoForm from '../components/produtoForm.svelte';
 	import { userStore } from '../utils/stores';
+	import { goto } from '$app/navigation';
+
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -25,14 +27,8 @@
 			slot: '<p>Pog</p>'
 		}
 	}
-
-	//let user: User;
-
-	//onMount(() => {
-	//	user = JSON.parse(localStorage.getItem('user') || "");
-	//})
-
 </script>
+
 <QueryClientProvider client={queryClient}>
 	<Modal components={modalComponentRegistry}/>
 	<Toast />
@@ -42,9 +38,9 @@
 			<div class="flex gap-8 items-center">
 				{#if $userStore.nome !== ""}
 				<div class="text-xl">Ola, {$userStore.nome}</div>
-				<div>Logout</div>
+				<button class="btn text-xl" on:click={async () => goto("/logout")}>Logout</button>
 				{:else}
-				<div>Login</div>
+				<button class="btn text-xl" on:click={() => goto("/login")}>Login</button>
 				{/if}
 			</div>
 		</div>

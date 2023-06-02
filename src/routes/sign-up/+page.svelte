@@ -6,21 +6,26 @@
 
 	let showPw = false;
 	let pw: string;
-	const errorToast: ToastSettings = {
-		message: "Ocorreu um erro",
+
+	const signupToast: ToastSettings = {
+		message: "Conta Criada com sucesso!",
+		background: "variant-ghost-success"
+	}
+
+	const signupErrorToast: ToastSettings = {
+		message: "Houve um erro na criacao da conta :(",
 		background: "variant-ghost-error"
 	}
 
 	async function criarContaRequest(e: HTMLFormElement) {
 		try{
 			await criarConta(e)
-			goto("/")
+			toastStore.trigger(signupToast)
+			goto("/login")
 		} catch(e) {
-			toastStore.trigger(errorToast);
+			toastStore.trigger(signupErrorToast);
 		}
 	}
-
-
 </script>
 
 <div class="flex items-center justify-center h-full">

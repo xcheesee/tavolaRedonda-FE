@@ -51,11 +51,12 @@ export async function editProduto(produto: ProdutoItem) {
   return res
 }
 
-export async function finalizarPedido(carrinho: {[key:string]: CarrinhoItem}) {
+export async function finalizarPedido(token: string, carrinho: {[key:string]: CarrinhoItem}) {
   const res = await fetch("http://127.0.0.1:8000/api/pedidos", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
     },
     body: JSON.stringify({
       cliente_id: 1,
@@ -165,8 +166,9 @@ export async function getCategorias(token: string) {
   }
 }
 
-export async function getPedidos(token: string) {
-  const res = await fetch("http://127.0.0.1:8000/api/pedidos", {
+export async function getPedidos(token: string, filters="") {
+  console.log(filters)
+  const res = await fetch(`http://127.0.0.1:8000/api/pedidos${filters}`, {
     headers: {
       "Accept": "application/json",
       "Authorization": `Bearer ${token}`,
@@ -176,4 +178,34 @@ export async function getPedidos(token: string) {
   if (res.ok) {
     return json
   }
+}
+
+export async function getGraphs(token: string, filters: any) {
+  let pagamentoFilters = `?filter[status_pedido]=${filters.status_pedido}&filter[data_antes_de]=${filters.data_antes_de}&filter[data_depois_de]=${filters.data_depois_de}`
+  let statusFilters = `?filter[forma_pagamento]=${filters.forma_pagamento}&filter[data_antes_de]=${filters.data_antes_de}&filter[data_depois_de]=${filters.data_depois_de}`
+  let categoriaFilters = `?filter[data_antes_de]=${filters.data_antes_de}&filter[data_depois_de]=${filters.data_depois_de}`
+    
+  
+	const [pagamentosRes, statusRes, catRes] = await Promise.all([
+    fetch(`http://127.0.0.1:8000/api/pedidos/por_pagamento${pagamentoFilters}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }),
+    fetch(`http://127.0.0.1:8000/api/pedidos/por_status${statusFilters}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }),
+    fetch(`http://127.0.0.1:8000/api/pedidos/por_categoria${categoriaFilters}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    }),
+  ])
+	if(pagamentosRes.ok && statusRes.ok && catRes.ok) {
+		const [pagamentoJson, statusJson, catJson] = await Promise.all([pagamentosRes.json(), statusRes.json(), catRes.json()])
+		return {totalPagamentos: pagamentoJson, totalStatus: statusJson, totalCategorias: catJson}
+	}
+  throw {message:"Nao foi possivel recuperar os graficos"};
 }
