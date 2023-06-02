@@ -45,6 +45,7 @@
 
   const editStatusMutation = createMutation(editStatus, {
     onMutate: async ({ pedido, status, token}) => {
+      console.log(pedido)
       await queryClient.cancelQueries(["pedidos"])
       const prevPeds: PedidoQuery | undefined = queryClient.getQueryData(['pedidos'])
       
