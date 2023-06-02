@@ -92,11 +92,12 @@ export async function delPedido({token ,pedido_id}: {token: string, pedido_id: s
 
 }
 
-export async function editStatus({pedido, status}: {pedido: Pedido, status: 'recebido' | 'finalizado' | "em_andamento"}) {
+export async function editStatus({pedido, status, token}: {pedido: Pedido, status: 'recebido' | 'finalizado' | "em_andamento", token: string}) {
   const res = await fetch(`http://127.0.0.1:8000/api/pedidos/${pedido.id}`, {
-    method: "PUT",
+    method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
     },
     body: JSON.stringify({cliente_id: pedido.cliente.id, forma_pagamento: pedido.forma_pagamento, status_pedido: status})
   })

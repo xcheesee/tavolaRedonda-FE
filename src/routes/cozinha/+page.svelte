@@ -44,8 +44,7 @@
   })
 
   const editStatusMutation = createMutation(editStatus, {
-    onMutate: async ({ pedido, status}) => {
-      console.log(pedido)
+    onMutate: async ({ pedido, status, token}) => {
       await queryClient.cancelQueries(["pedidos"])
       const prevPeds: PedidoQuery | undefined = queryClient.getQueryData(['pedidos'])
       
@@ -92,7 +91,7 @@
     <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
       {#each byStatus.recebido as pedido}
       <CozinhaPedidoCard pedido={pedido} atualizarPedido={ () => {
-        $editStatusMutation.mutate({pedido, status: "em_andamento"})
+        $editStatusMutation.mutate({pedido, status: "em_andamento", token: $userStore.token})
       }}/>
       {/each}
     </div>
@@ -101,7 +100,7 @@
     <div class="text-yellow-500 text-5xl">Em Andamento</div>
     <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
       {#each byStatus.em_andamento as pedido}
-      <CozinhaPedidoCard pedido={pedido} atualizarPedido={ () => $editStatusMutation.mutate({pedido, status: "finalizado"}) }/>
+      <CozinhaPedidoCard pedido={pedido} atualizarPedido={ () => $editStatusMutation.mutate({pedido, status: "finalizado", token: $userStore.token}) }/>
       {/each}
     </div>
   </div>

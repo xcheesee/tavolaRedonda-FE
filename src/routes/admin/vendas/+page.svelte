@@ -134,6 +134,8 @@
           <span>Status</span>
           <select class="select" bind:value={filters.status_pedido}>
             <option value="finalizado">Finalizado</option>
+            <option value="em_andamento">Em Andamento</option>
+            <option value="recebido">Recebido</option>
             <option value="cancelado">Cancelado</option>
           </select>
         </label>
