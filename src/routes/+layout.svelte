@@ -11,6 +11,7 @@
 	import ProdutoForm from '../components/produtoForm.svelte';
 	import { userStore } from '../utils/stores';
 	import { goto } from '$app/navigation';
+	import PagamentoForm from '../components/pagamentoForm.svelte';
 
 	export let data;
 
@@ -27,6 +28,10 @@
 		prodFormModal: {
 			ref: ProdutoForm,
 			slot: '<p>Pog</p>'
+		},
+		pagamentoModal: {
+			ref: PagamentoForm,
+			slot: '<p>Log</p>'
 		}
 	}
 </script>

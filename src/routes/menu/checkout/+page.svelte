@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { ToastSettings } from "@skeletonlabs/skeleton";
+	import type { ModalSettings, ToastSettings } from "@skeletonlabs/skeleton";
 	import { toastStore } from "@skeletonlabs/skeleton";
 	import CheckoutItemCard from "../../../components/CheckoutItemCard.svelte";
 	import { carrinhoStore, userStore } from "../../../utils/stores";
@@ -8,7 +8,8 @@
 	import { io } from  "socket.io-client"
 
 	const socket = io("http://127.0.0.1:3000");
-
+	let forma_pagamento: string;
+	
 	function getTotal(val: string, multiplier: number): number {
 		const formattedVal = +val.replace(",", ".")
 		const total = formattedVal * multiplier
@@ -17,6 +18,10 @@
 
 	$: current = Object.values($carrinhoStore).reduce((acc, curr) => acc + getTotal(curr.valor, curr.qtd), 0).toFixed(2)
 
+	const pagamentoModal: ModalSettings = {
+		type: 'component',
+		component: 'pagamentoModal'
+	}
 	const confToast: ToastSettings = {
 		message: "Pedido enviado com sucesso!",
 		background: "variant-ghost-success",
@@ -41,12 +46,21 @@
 			{#each Object.values($carrinhoStore) as item}
 				<CheckoutItemCard item={item} />
 			{/each}
-			<div class="flex justify-between">
+			<div class="grid grid-cols-2 justify-between">
 				<div> Total: R${current} </div>
-				<div>
+				<label class="label">
+					<p>Forma de Pagamento</p>
+				  <select bind:value={forma_pagamento} class="select">
+					  <option value="credito">Cartao de Credito</option>
+					  <option value="debito">Cartao de Debito</option>
+					  <option value="dinheiro">Dinheiro</option>
+					</select>
+				</label>
+				<div class="col-span-2 items-center justify-center">
 					<button class="btn variant-ghost-warning" on:click={() => $carrinhoStore = {}}> Limpar Carrinho </button>
 					<button class="btn variant-ghost-success" on:click={async () => {
-						const res = await finalizarPedido($userStore.token, $carrinhoStore)
+
+						const res = await finalizarPedido($userStore.token, $carrinhoStore, forma_pagamento)
 						if(!res.ok) {
 							return toastStore.trigger(errorToast)
 						}

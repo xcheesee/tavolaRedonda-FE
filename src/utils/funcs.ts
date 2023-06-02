@@ -53,7 +53,7 @@ export async function editProduto({produto, token}: {produto: ProdutoItem, token
   return res
 }
 
-export async function finalizarPedido(token: string, carrinho: {[key:string]: CarrinhoItem}) {
+export async function finalizarPedido(token: string, carrinho: {[key:string]: CarrinhoItem}, pagamento: string) {
   const res = await fetch("http://127.0.0.1:8000/api/pedidos", {
     method: "POST",
     headers: {
@@ -64,7 +64,7 @@ export async function finalizarPedido(token: string, carrinho: {[key:string]: Ca
       cliente_id: 1,
       Status: 0,
       status_pedido: "recebido",
-      forma_pagamento: "Dinheiro",
+      forma_pagamento: pagamento,
       itens: Object.values(carrinho).map(val => ({
         produto_id: val.id, 
         quantidade: val.qtd,
