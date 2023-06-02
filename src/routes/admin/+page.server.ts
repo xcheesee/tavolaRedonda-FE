@@ -3,8 +3,7 @@ import { redirect } from '@sveltejs/kit';
 
 export const load = (({cookies}) => {
 	const token = cookies.get('token')
-	console.log(token)
 	if(!token) {
-		throw redirect(301, '/login')
+		throw redirect(307, '/login')
 	}
 })satisfies PageServerLoad
