@@ -1,23 +1,28 @@
 <script lang="ts" >
 	import MenuItemCard from "../../components/menuItemCard.svelte";
 	import Icon from "@iconify/svelte";
-	import { carrinhoStore } from "../../utils/stores";
+	import { carrinhoStore, userStore } from "../../utils/stores";
 	import { createQuery } from "@tanstack/svelte-query";
+	import { getCategorias, getProdutos } from "../../utils/funcs";
+	//import type { PageData } from "../$types";
 
-	export let data;
+	//export let data: PageData;
 
 	const produtoQuery = createQuery({
 		queryKey: ['produtos'],
-		queryFn: async () => await (await fetch("https://localhost:8000/api/produtos")).json(),
-		initialData: data.produto,
+		queryFn: async () => await getProdutos($userStore.token),
 	})
 
-	let produtoData = $produtoQuery.data
+	const categoriasQuery = createQuery({
+		queryKey: ['categorias'],
+		queryFn: async () => await getCategorias($userStore.token)
+	})
+
 
 	function getProdutoByCat(produtos: any, categoria_id: number) {
 		return produtos.filter((ele: any) => ele.categoria_id === categoria_id)
 	}
-
+	$: produtoData = $produtoQuery.data
 	$: carrinhoItens = Object.keys($carrinhoStore).length
 
 </script>
@@ -26,18 +31,26 @@
 		<button 
 			class="btn"
 			on:click={() => produtoData = $produtoQuery.data}>Tudo</button>
-		{#each data.categorias as categoria}
-		<button 
-			class="btn"
-			on:click={() => produtoData = { data: [...getProdutoByCat($produtoQuery.data.data, categoria.id)]}}>{categoria.nome}</button>
-			
-		{/each}
+		{#if $categoriasQuery.isLoading}
+			<div>Carregando...</div>
+		{:else}
+			{#each $categoriasQuery.data.categorias as categoria}
+			<button 
+				class="btn"
+				on:click={() => produtoData = { data: [...getProdutoByCat($produtoQuery.data.data, categoria.id)]}}>{categoria.nome}</button>
+				
+			{/each}
+		{/if}
 	</div>
 	<div class="flex justify-center">
 		<div class="flex flex-col gap-4 pt-8 lg:w-[1024px]">
+			{#if $produtoQuery.isLoading}
+			<div>Carregando...</div>
+			{:else}
 			{#each produtoData.data as produto}
 				<MenuItemCard produto={produto}/>
 			{/each}
+			{/if}
 		</div>
 	</div>
 	<div class="fixed bottom-0 right-0 m-8">

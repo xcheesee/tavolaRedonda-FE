@@ -4,7 +4,6 @@
 	import CheckoutItemCard from "../../../components/CheckoutItemCard.svelte";
 	import { carrinhoStore } from "../../../utils/stores";
 	import { goto } from "$app/navigation";
-	import { error } from "@sveltejs/kit";
 	import { finalizarPedido } from "../../../utils/funcs";
 	import { io } from  "socket.io-client"
 

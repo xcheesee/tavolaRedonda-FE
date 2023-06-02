@@ -71,3 +71,12 @@ export interface PedidoStatus {
     em_andamento: Pedido[];
     recebido: Pedido[];
 }
+
+export interface User {
+    mensagem: string;
+    nome:string;
+    email: string;
+    user_id: string;
+    token: string;
+    type: string;
+}

@@ -9,7 +9,7 @@
 	import { AppShell, Modal, type ModalComponent, Toast } from '@skeletonlabs/skeleton';
 	import { QueryClient, QueryClientProvider } from '@tanstack/svelte-query';
 	import ProdutoForm from '../components/produtoForm.svelte';
-	import { produtoStore } from '../utils/stores';
+	import { userStore } from '../utils/stores';
 
 	const queryClient = new QueryClient({
 		defaultOptions: {
@@ -26,6 +26,12 @@
 		}
 	}
 
+	//let user: User;
+
+	//onMount(() => {
+	//	user = JSON.parse(localStorage.getItem('user') || "");
+	//})
+
 </script>
 <QueryClientProvider client={queryClient}>
 	<Modal components={modalComponentRegistry}/>
@@ -34,8 +40,12 @@
 		<div slot="header" class="flex justify-between px-4 py-2 items-center bg-surface-700">
 		<div class="text-3xl"> Tavola Redonda</div>
 			<div class="flex gap-8 items-center">
-				<div class="text-xl">Ola, User</div>
+				{#if $userStore.nome !== ""}
+				<div class="text-xl">Ola, {$userStore.nome}</div>
 				<div>Logout</div>
+				{:else}
+				<div>Login</div>
+				{/if}
 			</div>
 		</div>
 		<slot />

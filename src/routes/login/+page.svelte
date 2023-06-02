@@ -1,22 +1,47 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
+	import { login } from "../../utils/funcs";
+	import { toastStore, type ToastSettings } from "@skeletonlabs/skeleton";
+	import { goto } from "$app/navigation";
+  import { userStore } from "../../utils/stores"; 
 
 	let showPw = false;
 	let pw: string;
+
+	const errorToast: ToastSettings = {
+		message: "Ocorreu um erro",
+		background: "variant-ghost-error"
+	}
+
+	async function LoginRequest(e: HTMLFormElement) {
+		try{
+			const userData = await login(e)
+			$userStore = {...userData}
+			//goto('/menu')
+		} catch(e) {
+			toastStore.trigger(errorToast)
+		}
+	}
 </script>
 <div class="flex items-center justify-center h-full">
 	<div class="lg:w-1/3 bg-surface-800 rounded-xl border border-surface-500">
-		<div class="grid gap-4 mx-4 my-8">
+		<form 
+			class="grid gap-4 mx-4 my-8"
+			on:submit={e => {
+		    e.preventDefault();	
+			  LoginRequest(e.currentTarget)
+			}}
+			>
 			<div class="text-center font-bold text-3xl pb-4">FACA SEU LOGIN IMEDIATAMENTE</div>
 			<label class="label"	>
-				<span>Username</span>
-				<input class="input" type="text"/>
+				<span>E-Mail</span>
+				<input class="input" type="text" name="email"/>
 			</label>
 			{#if showPw}
 			<label class="label">
 			  <span>Password</span>
 			  <div class="input-group input-group-divider grid-cols-[1fr_auto]">
-			  	 <input type="text" bind:value={pw}/>
+			  	 <input type="text" bind:value={pw} name="password"/>
 			  	<button class="" on:click={() => showPw = !showPw}><Icon icon="fluent:eye-off-20-filled" width={36}/></button>
 			  </div>
 			</label>
@@ -24,15 +49,15 @@
 			<label class="label">
 				<span>Password</span>
 			  <div class="input-group input-group-divider grid-cols-[1fr_auto]">
-			  	<input type="password" bind:value={pw}/>
+			  	<input type="password" bind:value={pw} name="password"/>
 			  	<button class="" on:click={() => showPw = !showPw}><Icon icon="fluent:eye-20-filled" width={36}/></button>
 			  </div>
 			</label>
 			{/if}
 			<div class="flex justify-end gap-4">
-				<button class="btn">Criar Conta</button>
-				<button class="btn variant-filled">Login</button>
+				<button class="btn" on:click={() => goto("/sign-up")} type="button">Criar Conta</button>
+				<button class="btn variant-filled" type="submit">Login</button>
 			</div>
-		</div>
+		</form>
 	</div>
 </div>

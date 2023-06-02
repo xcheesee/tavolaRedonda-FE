@@ -1,12 +1,12 @@
 <script lang="ts">
   import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
-  import { delPedido } from "../../utils/funcs.js";
+  import { delPedido, getPedidos } from "../../utils/funcs.js";
   import type { Pedido, PedidoQuery, PedidoStatus } from "../../utils/types.js";
   import { toastStore, type ToastSettings } from "@skeletonlabs/skeleton";
-	import ClientePedidoCard from "../../components/clientePedidoCard.svelte";
+  import ClientePedidoCard from "../../components/clientePedidoCard.svelte";
   import { io } from "socket.io-client"
+  import { userStore } from "../../utils/stores.js";
 
-  //export let data;
 
   const socket = io("http://127.0.0.1:3000")
 
@@ -30,8 +30,7 @@
 
   const pedidosQuery = createQuery({
     queryKey: ['pedidos'],
-    queryFn: async () => await(await fetch("http://127.0.0.1:8000/api/pedidos")).json(),
-    //initialData: data.data,
+    queryFn: async () => await getPedidos($userStore.token),
     onSuccess: (res) => {
       byStatus = {
         finalizado: [],
@@ -44,13 +43,13 @@
   })
 
   const delPedidoMutation = createMutation(delPedido, {
-    onMutate: async (id:  string) => {
+    onMutate: async (data: {token:string, pedido_id: string}) => {
       await queryClient.cancelQueries(['pedidos'])
       const prevPeds: PedidoQuery | undefined = queryClient.getQueryData(['pedidos'])
 
       if (prevPeds) {
         queryClient.setQueryData(['pedidos'], {
-          data: [...prevPeds.data.filter(ele => +ele.id !== +id)]
+          data: [...prevPeds.data.filter(ele => +ele.id !== +data.pedido_id)]
         })
       }
       return {...prevPeds}
@@ -81,17 +80,17 @@
   <div class="flex flex-col xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
     <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
     {#each byStatus.recebido as pedidoRecebido}
-      <ClientePedidoCard pedido={pedidoRecebido} delPedido={ async() => $delPedidoMutation.mutate(pedidoRecebido.id) } />
+      <ClientePedidoCard pedido={pedidoRecebido} delPedido={ async() => $delPedidoMutation.mutate({token: $userStore.token, pedido_id: pedidoRecebido.id}) } />
     {/each}
     </div>
     <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
     {#each byStatus.em_andamento as pedidoRecebido}
-      <ClientePedidoCard pedido={pedidoRecebido} delPedido={ async() => $delPedidoMutation.mutate(pedidoRecebido.id) } />
+      <ClientePedidoCard pedido={pedidoRecebido} delPedido={ async() => $delPedidoMutation.mutate({token: $userStore.token, pedido_id: pedidoRecebido.id}) } />
     {/each}
     </div>
     <div class="grid xl:grid-cols-3 lg:grid-cols-2 px-8 py-8 gap-8">
     {#each byStatus.finalizado as pedidoRecebido}
-      <ClientePedidoCard pedido={pedidoRecebido} delPedido={ async() => $delPedidoMutation.mutate(pedidoRecebido.id) } />
+      <ClientePedidoCard pedido={pedidoRecebido} delPedido={ async() => $delPedidoMutation.mutate({token: $userStore.token, pedido_id: pedidoRecebido.id}) } />
     {/each}
     </div>
   </div>
