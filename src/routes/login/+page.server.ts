@@ -1,7 +1,6 @@
 import { login } from '../../utils/funcs';
 import type { PageServerLoad } from './$types';
 
-import { redirect } from '@sveltejs/kit';
 export const load = (({cookies}) => {
 	if(cookies.get('token')) {
 		return {token: cookies.get('token')}

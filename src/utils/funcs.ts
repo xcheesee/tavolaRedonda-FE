@@ -1,10 +1,12 @@
 import type { CarrinhoItem, Pedido, ProdutoItem } from "./types"
 
-export async function addProduto ({nome, valor, descricao, categoria_id}: ProdutoItem) {
-  const res = await fetch(`http://localhost:8000/api/produtos`, {
+export async function addProduto ({nome, valor, descricao, categoria_id, token}: ProdutoItem) {
+  const res = await fetch(`http://172.19.0.4:8000/api/produtos`, {
     method: "POST",
     headers: {
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": `Bearer ${token}`
     },
     body: JSON.stringify({
       nome: nome,
@@ -128,7 +130,7 @@ export async function criarConta (e: HTMLFormElement) {
 
 export async function login (e: FormData) {
   //const formData = new FormData(e)
-  const res = await fetch("http://127.0.0.1:8000/api/login", {
+  const res = await fetch("http://tavred-app:8000/api/login", {
     method: "POST",
     headers: {
       "Accept": "application/json"

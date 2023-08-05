@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon from "@iconify/svelte";
 	//import { login } from "../../utils/funcs";
-	import { toastStore, type ToastSettings } from "@skeletonlabs/skeleton";
+	import type { ToastSettings } from "@skeletonlabs/skeleton";
 	import { goto } from "$app/navigation";
 	import { userStore } from "../../utils/stores"; 
 	import { onMount } from "svelte";

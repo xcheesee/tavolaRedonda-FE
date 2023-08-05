@@ -6,7 +6,7 @@
   import { createMutation, createQuery, useQueryClient } from '@tanstack/svelte-query';
   import { addProduto } from '../../../utils/funcs';
   import type { Produto, ProdutoItem, prodModal } from '../../../utils/types';
-  import { produtoStore, categoriasStore } from '../../../utils/stores';
+  import { produtoStore, categoriasStore, userStore } from '../../../utils/stores';
 
   const queryClient = useQueryClient()
 
@@ -34,7 +34,7 @@
 
   $: produtoQuery = createQuery({
     queryKey: ['produtos', routeFilter],
-    queryFn: async () => await ( await fetch(`http://127.0.0.1:8000/api/produtos${routeFilter}`) ).json(),
+    queryFn: async () => await ( await fetch(`http://localhost:8000/api/produtos${routeFilter}`) ).json(),
     //initialData: data.produtos,
     onSuccess: (res) => {
       page = {
@@ -77,7 +77,7 @@
     type: 'component',
     component: 'prodFormModal',
     response: async (r: prodModal) => {
-      if(r.send) $addProdMutation.mutate({...r})
+      if(r.send) $addProdMutation.mutate({...r, token: $userStore.token})
     },
   };
 

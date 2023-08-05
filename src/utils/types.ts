@@ -9,6 +9,7 @@ export interface ProdutoItem {
     descricao: string;
     categoria: string;
     categoria_id?: string;
+    token?: string;
 }
 
 export interface PedidoProduto extends ProdutoItem {

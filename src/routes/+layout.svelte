@@ -43,7 +43,7 @@
 		<div slot="header" class="flex justify-between px-4 py-2 items-center bg-surface-700">
 		<div class="text-3xl"> Tavola Redonda</div>
 			<div class="flex gap-8 items-center">
-				{#if data.user !== ""}
+				{#if data.user && data.user !== ""}
 				<div class="text-xl">Ola, {data.user}</div>
 				<button class="btn text-xl" on:click={async () => goto("/logout")}>Logout</button>
 				{:else}
